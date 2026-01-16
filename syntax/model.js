@@ -167,20 +167,22 @@ export class Block {
     let firstInput = null
     let checkAlias = false
     let text = this.children
-      .map(child => {
+      .map((child, i, arr) => {
         if (child.isIcon) {
           checkAlias = true
         }
         if (!firstInput && !(child.isLabel || child.isIcon)) {
           firstInput = child
         }
-        return child.isScript
-          ? `\n${indent(child.stringify())}\n`
-          : child.stringify().trim() + " "
+        if (child.isScript) {
+          return `\n${indent(child.stringify())}\n`
+        }
+        const next = arr[i + 1]
+        const needsSpace = !(next && next.isScript)
+        return child.stringify().trim() + (needsSpace ? " " : "")
       })
       .join("")
       .trim()
-      .replace(/ +\n/g, "\n")
 
     const lang = this.info.language
     if (checkAlias && lang && this.info.selector) {
