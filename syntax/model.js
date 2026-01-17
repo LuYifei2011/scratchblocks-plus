@@ -295,7 +295,8 @@ export class Block {
           currentLinePrefix = lines[lines.length - 1].trim() + " "
         }
 
-        const next = arr[i + 1]
+        let next = arr[i + 1]
+        next = next && next.name === "loopArrow" ? arr[i + 2] : next
         const needsSpace = !(next && next.isScript)
         return trimmed + (needsSpace ? " " : "")
       })
