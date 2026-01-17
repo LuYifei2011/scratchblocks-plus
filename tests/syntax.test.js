@@ -213,6 +213,31 @@ describe("overrides", () => {
     const code = "forever :: stack"
     expect(parseBlock(code).stringify()).toEqual(code)
   })
+
+  test("parentheses in number-dropdown", () => {
+    const code = String.raw`say (\(\) v)`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("brackets in number-dropdown", () => {
+    const code = String.raw`say (\[] v)`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("boolean in number-dropdown", () => {
+    const code = String.raw`say (\<> v)`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("parentheses in dropdown", () => {
+    const code = String.raw`say [() v]`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("brackets in dropdown", () => {
+    const code = String.raw`say [[\] v]`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
 })
 
 describe("color literals", () => {
