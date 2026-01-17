@@ -164,14 +164,6 @@ export class Input {
     return true
   }
 
-  setMenu(value) {
-    this.menu = value
-  }
-
-  setMenu(value) {
-    this.menu = value
-  }
-
   stringify(parentPrefix = "") {
     if (this.isColor) {
       assert(this.value[0] === "#")

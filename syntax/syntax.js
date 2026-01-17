@@ -161,7 +161,7 @@ function paintBlock(info, children, languages) {
   // dropdowns menus
   children.forEach(child => {
     if (child.hasArrow) {
-      child.setMenu(lookupDropdown(child.value, info.id, languages))
+      child.menu = lookupDropdown(child.value, info.id, languages)
     }
   })
 
