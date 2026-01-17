@@ -274,27 +274,25 @@ export class Block {
     let firstInput = null
     let checkAlias = false
     let currentLinePrefix = ""
-    const parts = []
+    let text = this.children
+      .map((child, i, arr) => {
+        if (child.isIcon) {
+          checkAlias = true
+        }
+        if (!firstInput && !(child.isLabel || child.isIcon)) {
+          firstInput = child
+        }
 
-    for (const child of this.children) {
-      if (child.isIcon) {
-        checkAlias = true
-      }
-      if (!firstInput && !(child.isLabel || child.isIcon)) {
-        firstInput = child
-      }
-
-      if (child.isScript) {
-        parts.push(`\n${indent(child.stringify())}\n`)
-        currentLinePrefix = ""
-      } else {
+        if (child.isScript) {
+          currentLinePrefix = ""
+          return `\n${indent(child.stringify()).trimEnd()}\n`
+        }
         // Pass the current line prefix to child's stringify for alignment
         const childStr = child.isInput
           ? child.stringify(currentLinePrefix)
           : child.stringify()
 
         const trimmed = childStr.trim()
-        parts.push(trimmed)
 
         // Update prefix for next child
         if (!childStr.includes("\n")) {
@@ -304,10 +302,13 @@ export class Block {
           const lines = childStr.split("\n")
           currentLinePrefix = lines[lines.length - 1].trim() + " "
         }
-      }
-    }
 
-    let text = parts.join(" ").trim().replace(/ +\n/g, "\n")
+        const next = arr[i + 1]
+        const needsSpace = !(next && next.isScript)
+        return trimmed + (needsSpace ? " " : "")
+      })
+      .join("")
+      .trim()
 
     if (this.info.shape === "reporter" && hexColorPat.test(text)) {
       return `(\\${text})`
