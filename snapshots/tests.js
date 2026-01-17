@@ -782,7 +782,11 @@ when [left up right v] pressed in order
 when [A v] button pressed
 <[A v] button pressed?>
 when [moved v]
-display [heart v]
+display ({01010,
+          10101,
+          10001,
+          01010,
+          00100} v)
 display text [Hello!]
 clear display
 when tilted [any v]
@@ -1243,7 +1247,11 @@ Wenn [nach links nach oben nach rechts v] der Reihe nach gedrückt
 Wenn Knopf [A v]gedrückt wird
 <Knopf [A v] gedrückt? >
 Wenn [bewegt v]
-zeige [heart v] an
+zeige ({01010,
+        10101,
+        10001,
+        01010,
+        00100} v) an
 zeige Text [Hallo!] an
 zeige nichts an
 Wenn [beliebiger v] geneigt
