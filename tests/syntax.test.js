@@ -200,6 +200,11 @@ describe("escaping and stringifying", () => {
     expect(parseBlock(code).stringify()).toBe(code)
   })
 
+  test("boolean in number-dropdown", () => {
+    const code = String.raw`say (\<> v)`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
   test("parentheses in dropdown", () => {
     const code = String.raw`say [() v]`
     expect(parseBlock(code).stringify()).toBe(code)

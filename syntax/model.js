@@ -113,7 +113,7 @@ export class Input {
       text = text.replace(/([\]\\])/g, "\\$1")
     }
     if (this.isRound) {
-      text = text.replace(/([()[])/g, "\\$1")
+      text = text.replace(/([()[<])/g, "\\$1")
     }
     text = text.replace(/ v$/, " \\v")
     if (this.hasArrow) {
