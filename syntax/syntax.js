@@ -977,7 +977,9 @@ function recogniseStuff(scripts) {
  */
 function assignBlockPaths(doc) {
   function processBlock(block, basePath, blockMap) {
-    if (!block || !block.isBlock) return
+    if (!block || !block.isBlock) {
+      return
+    }
 
     block.blockPath = basePath
     blockMap.set(basePath, block)
@@ -1016,7 +1018,9 @@ function assignBlockPaths(doc) {
   }
 
   function processGlow(glow, basePath, blockMap) {
-    if (!glow || !glow.isGlow) return
+    if (!glow || !glow.isGlow) {
+      return
+    }
 
     const child = glow.child
     if (child.isBlock) {
