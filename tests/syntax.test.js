@@ -189,6 +189,26 @@ describe("escaping and stringifying", () => {
     const expected = String.raw`say [[)v]`
     expect(parseBlock(input).stringify()).toBe(expected)
   })
+
+  test("parentheses in number-dropdown", () => {
+    const code = String.raw`say (\(\) v)`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("brackets in number-dropdown", () => {
+    const code = String.raw`say (\[] v)`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("parentheses in dropdown", () => {
+    const code = String.raw`say [() v]`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("brackets in dropdown", () => {
+    const code = String.raw`say [[\] v]`
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
 })
 
 describe("color literals", () => {
