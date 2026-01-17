@@ -177,7 +177,8 @@ export class Block {
         if (child.isScript) {
           return `\n${indent(child.stringify())}\n`
         }
-        const next = arr[i + 1]
+        let next = arr[i + 1]
+        next = next && next.name === "loopArrow" ? arr[i + 2] : next
         const needsSpace = !(next && next.isScript)
         return child.stringify().trim() + (needsSpace ? " " : "")
       })
