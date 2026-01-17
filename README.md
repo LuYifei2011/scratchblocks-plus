@@ -1,11 +1,9 @@
 Make pictures of Scratch blocks from text.
 
-<a src="[http://luyifei2011.github.io/scratchblocks-plus/#?style=scratch3&script=when%20flag%20clicked%0Aclear%0Aforever%0A%20%20pen%20down%0A%20%20if%20%3C%3Cmouse%20down%3F%3E%20and%20%3Ctouching%20(mouse-pointer%20v)%20%3F%3E%3E%20then%0A%20%20%20%20display%20(%7B01010%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%2010101%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%2010001%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%2001010%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%2000100%7D%20v)%0A%20%20else%0A%20%20  add (x position)% to [list v]%0A  end%0A  move (foo)% steps%0A  turn ccw (9)% degrees%0Aend](http://luyifei2011.github.io/scratchblocks-plus/#?style=scratch3&script=when%20flag%20clicked%0Aclear%0Aforever%0A%20%20pen%20down%0A%20%20if%20%3C%3Cmouse%20down%3F%3E%20and%20%3Ctouching%20(mouse-pointer%20v)%20%3F%3E%3E%20then%0A%20%20%20%20display%20(%7B01010%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%2010101%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%2010001%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%2001010%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%2000100%7D%20v)%0A%20%20else%0A%20%20%20%20add%20(x%20position)%20to%20%5Blist%20v%5D%0A%20%20end%0A%20%20move%20(foo)%20steps%0A%20%20turn%20ccw%20(9)%20degrees%0Aend)">
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="/readme-assets/images/dark.png">
   <img alt="Screenshot" src="/readme-assets/images/light.png">
 </picture>
-</a>
 
 **[Try it out!](https://luyifei2011.github.io/scratchblocks-plus/)**
 
