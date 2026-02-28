@@ -154,7 +154,7 @@ scratchblocks.renderMatching('pre.blocks');
 
 ## ESM Support
 
-Since version 3.6.0, scratchblocks-plus can be properly loaded as an ESM module. The ESM version, instead of defining `window.scratchblocks`, default-exports the `scratchblocks` object. Similarly, the JavaScript translation files default-exports a function to load the translations.
+scratchblocks-plus can be properly loaded as an ESM module. The ESM version, instead of defining `window.scratchblocks`, default-exports the `scratchblocks` object. Similarly, the JavaScript translation files default-exports a function to load the translations.
 
 ```js
 import scratchblocks from "./scratchblocks-plus-es-min.js";
@@ -189,19 +189,19 @@ npm start
 
 Then open <http://localhost:8000/> :-)
 
-For more details, see [`CONTRIBUTING.md`](https://github.com/LuYifei2011/scratchblocks-plus/blob/master/.github/CONTRIBUTING.md).
+For more details, see [`CONTRIBUTING.md`](https://github.com/LuYifei2011/scratchblocks-plus/blob/main/.github/CONTRIBUTING.md).
 
 # Credits
 
 Many, many thanks to the [contributors](https://github.com/LuYifei2011/scratchblocks-plus/graphs/contributors)!
 
-- Authored by [LuYifei2011](https://github.com/LuYifei2011)
+- Maintained by [LuYifei2011](https://github.com/LuYifei2011)
 - This is a fork of [scratchblocks](https://github.com/scratchblocks/scratchblocks), so all the credit there still applies here.
 - Original scratchblocks library by [tjvr](https://github.com/tjvr)
 - Original scratchblocks library maintained by tjvr and [apple502j](https://github.com/apple502j)
 - Icons derived from [Scratch Blocks](https://github.com/scratchfoundation/scratch-blocks) (Apache License 2.0)
 - Scratch 2 SVG proof-of-concept, shapes & filters by [as-com](https://github.com/as-com)
-- Anna helped with a formula, and pointed out that I can't read graphs
+- Anna helped with a formula, and pointed out that tjvr can't read graphs
 - JSO designed the syntax and wrote the original [Block Plugin](https://en.scratch-wiki.info/wiki/Block_Plugin_\(1.4\))
 - Help with translation code from [joooni](https://scratch.mit.edu/users/joooni/)
 - Block translations from the [scratch-l10n repository](https://github.com/scratchfoundation/scratch-l10n/)

@@ -1,9 +1,7 @@
 Hello!
-Thanks for your interest in contributing to scratchblocks.
+Thanks for your interest in contributing to scratchblocks-plus.
 
 The [Community Guidelines](https://github.com/scratchfoundation/scratch-www/wiki/Community-Guidelines) for **[scratch-www](https://github.com/scratchfoundation/scratch-www)** also apply here. :-)
-
-In particular, although this code is used on the Scratch website, it's not maintained by the Scratch Team. So please remember developing this isn't our job!
 
 ---
 
@@ -19,11 +17,10 @@ For **pull requests**:
 
 * When developing, you need to run a local web server:
 
-    ```
+    ```sh
     npm start
     ```
 
 * Browse to <http://localhost:8000/> to access the development version.
 
-To modify the homepage, send a PR to the [scratchblocks/scratchblocks.github.io](https://github.com/scratchblocks/scratchblocks.github.io) repo.
-
+To modify the homepage, send a PR to the [LuYifei2011/luyifei2011.github.io](https://github.com/LuYifei2011/luyifei2011.github.io) repo.
