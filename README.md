@@ -11,9 +11,19 @@ Make pictures of Scratch blocks from text.
 
 **scratchblocks-plus** is a fork of **scratchblocks**, and adds the following features:
 
-- basic TypeScript support
-- Matrix support (issue: [scratchblocks#509](https://github.com/scratchblocks/scratchblocks/issues/509), PR: [scratchblocks#573](https://github.com/scratchblocks/scratchblocks/pull/573))
+- matrix support
+  - [try it out!](https://luyifei2011.github.io/scratchblocks-plus/#?style=scratch3&script=display%20(%7B01010%2C%0A%20%20%20%20%20%20%20%20%20%2010101%2C%0A%20%20%20%20%20%20%20%20%20%2010001%2C%0A%20%20%20%20%20%20%20%20%20%2001010%2C%0A%20%20%20%20%20%20%20%20%20%2000100%7D%20v))
+  - issue: [scratchblocks#509](https://github.com/scratchblocks/scratchblocks/issues/509)
+  - PR: [scratchblocks#573](https://github.com/scratchblocks/scratchblocks/pull/573)
 - block highlight
+  - [example 1](https://luyifei2011.github.io/scratchblocks-plus/example/text-highlight.html)
+  - [example 2](https://luyifei2011.github.io/scratchblocks-plus/example/speech-highlight.html)
+- dropdown menu translate
+  - [try it out!](https://luyifei2011.github.io/scratchblocks-plus/translator/#?lang=zh_cn&script=go%20to%20(mouse-pointer%20v))
+  - issue: [scratchblocks#324](https://github.com/scratchblocks/scratchblocks/issues/324)
+  - PR: [scratchblocks#556](https://github.com/scratchblocks/scratchblocks/pull/556)
+- basic TypeScript support
+- and more!
 
 **scratchblocks-plus** is compatible with **scratchblocks**, so you can use it as a drop-in replacement.
 
