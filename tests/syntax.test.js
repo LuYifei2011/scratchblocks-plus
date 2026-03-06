@@ -838,4 +838,26 @@ describe("misc regression test", () => {
   })
 })
 
+describe("diff lines and stringifying", () => {
+  test("plus line", () => {
+    const code = "+ show"
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("minus line", () => {
+    const code = "- show"
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("plus line in c-block", () => {
+    const code = "forever\n+ show\nend"
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+
+  test("minus line in c-block", () => {
+    const code = "forever\n- show\nend"
+    expect(parseBlock(code).stringify()).toBe(code)
+  })
+})
+
 // TODO test { } handling
