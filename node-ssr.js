@@ -10,9 +10,8 @@ try {
 } catch {
   try {
     let createCanvas
-    const { DOMParser, XMLSerializer, DOMImplementation } = await import(
-      "@xmldom/xmldom"
-    )
+    const { DOMParser, XMLSerializer, DOMImplementation } =
+      await import("@xmldom/xmldom")
     const nodeDocument = new DOMImplementation().createDocument(
       "http://www.w3.org/2000/svg",
       null,
