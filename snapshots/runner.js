@@ -1,5 +1,5 @@
 import path from "path"
-import { renderToSVGString, loadLanguages } from "../node.js"
+import { renderToSVGString, loadLanguages } from "../node-ssr.js"
 import { Resvg } from "@resvg/resvg-js"
 import fs from "fs"
 
