@@ -7,6 +7,8 @@ Make pictures of Scratch blocks from text.
 
 **[Try it out!](https://luyifei2011.github.io/scratchblocks-plus/)**
 
+[Documentation](https://luyifei2011.github.io/scratchblocks-plus-docs/)
+
 ---
 
 **scratchblocks-plus** is a fork of **scratchblocks**, and adds the following features:
@@ -22,6 +24,9 @@ Make pictures of Scratch blocks from text.
   - [try it out!](https://luyifei2011.github.io/scratchblocks-plus/translator/#?lang=zh_cn&script=go%20to%20(mouse-pointer%20v))
   - issue: [scratchblocks#324](https://github.com/scratchblocks/scratchblocks/issues/324)
   - PR: [scratchblocks#556](https://github.com/scratchblocks/scratchblocks/pull/556)
+- server-side rendering
+  - issue: [scratchblocks#402](https://github.com/scratchblocks/scratchblocks/issues/402)
+  - PR: [scratchblocks#589](https://github.com/scratchblocks/scratchblocks/pull/589)
 - basic TypeScript support
 - and more!
 
@@ -56,7 +61,7 @@ It uses the [pandoc_scratchblocks](https://github.com/CodeClub/pandoc_scratchblo
 This would probably be a good way to write a Scratch book.
 -->
 
-# React
+## React
 
 Use the [scratchblocks-plus-react](https://github.com/LuYifei2011/scratchblocks-plus-react) package to render scratchblocks in React.
 
@@ -135,7 +140,7 @@ The translations files are hundreds of kilobytes in size, so to keep your page b
 For example, a translations file that just loads the German language (ISO code `de`) would look something like this:
 
 ```js
-window.scratchblocks.loadLanguages({
+scratchblocks.loadLanguages({
     de: <contents of locales/de.json>
 })
 ```
@@ -144,7 +149,7 @@ If you're using a JavaScript bundler you should be able to build your own transl
 This requires your bundler to allow importing JSON files as JavaScript.
 
 ```js
-window.scratchblocks.loadLanguages({
+scratchblocks.loadLanguages({
     de: require('scratchblocks/locales/de.json'),
 })
 ```
