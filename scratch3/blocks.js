@@ -244,7 +244,7 @@ export class MatrixView {
         if (isFilled) {
           rect.setAttribute("fill", "#FFFFFF")
         } else {
-          rect.classList.add(`sb3-${parent.info.category}`)
+          addClass(rect, `sb3-${parent.info.category}`)
         }
 
         elements.push(rect)

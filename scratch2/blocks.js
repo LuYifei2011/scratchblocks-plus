@@ -24,6 +24,20 @@ const {
   darkFilter,
 } = style
 
+// to be compatible with node.js xmldom
+function addClass(el, className) {
+  if (el.classList) {
+    el.classList.add(className)
+  } else {
+    const current = el.getAttribute("class") || ""
+    const classes = current.split(/\s+/).filter(Boolean)
+    if (!classes.includes(className)) {
+      classes.push(className)
+      el.setAttribute("class", classes.join(" "))
+    }
+  }
+}
+
 export class LabelView {
   constructor(label) {
     Object.assign(this, label)
@@ -184,7 +198,7 @@ class MatrixView {
         if (isFilled) {
           rect.setAttribute("fill", "#FFFFFF")
         } else {
-          rect.classList.add(`sb-${parent.info.category}`)
+          addClass(rect, `sb-${parent.info.category}`)
         }
 
         elements.push(rect)
