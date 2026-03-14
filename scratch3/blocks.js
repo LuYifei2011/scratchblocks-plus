@@ -997,7 +997,7 @@ class DocumentView {
    * Build the element map by finding all elements with data-block-path
    */
   _buildElementMap() {
-    if (!this.el) {
+    if (!this.el || !this.el.querySelectorAll) {
       return
     }
 
