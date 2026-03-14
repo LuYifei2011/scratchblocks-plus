@@ -997,7 +997,9 @@ class DocumentView {
    * Build the element map by finding all elements with data-block-path
    */
   _buildElementMap() {
-    if (!this.el) return
+    if (!this.el) {
+      return
+    }
 
     this.elementMap.clear()
     const blocks = this.el.querySelectorAll("[data-block-path]")
@@ -1028,7 +1030,9 @@ class DocumentView {
    */
   highlightBlock(path, options = {}) {
     const el = this.getElementByPath(path)
-    if (!el) return false
+    if (!el) {
+      return false
+    }
 
     // Add highlight class to the first child (the shape element)
     const shapeEl = el.firstElementChild
