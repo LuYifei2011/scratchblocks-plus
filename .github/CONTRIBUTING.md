@@ -8,7 +8,7 @@ The [Community Guidelines](https://github.com/scratchfoundation/scratch-www/wiki
 When **reporting an issue**, please do the following:
 
 * Read [the **syntax guide**](https://en.scratch-wiki.info/wiki/Block_Plugin/Syntax)
-* Use **code examples** and links to <https://scratchblocks.github.io/>, where relevant
+* Use **code examples** and links to <https://luyifei2011.github.io/scratchblocks-plus/>, where relevant
 * Provide **screenshots**/comparison with Scratch, where relevant
 
 ---
