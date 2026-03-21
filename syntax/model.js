@@ -267,7 +267,10 @@ export class Block {
       return
     }
 
-    if (this.info.category === "custom-arg" || this.info.category === "custom") {
+    if (
+      this.info.category === "custom-arg" ||
+      this.info.category === "custom"
+    ) {
       return
     }
 
