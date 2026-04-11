@@ -1875,6 +1875,16 @@
     }
   },
   "ignorelt": [],
+  "faceParts": [
+    "nose",
+    "mouth",
+    "left eye",
+    "right eye",
+    "between eyes",
+    "left ear",
+    "right ear",
+    "top of head"
+  ],
   "soundEffects": [
     "tuinairde",
     "peanáil ar chlé/ar dheis"

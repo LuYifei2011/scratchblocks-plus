@@ -1581,6 +1581,16 @@
     }
   },
   "ignorelt": [],
+  "faceParts": [
+    "nose",
+    "mouth",
+    "left eye",
+    "right eye",
+    "between eyes",
+    "left ear",
+    "right ear",
+    "top of head"
+  ],
   "soundEffects": [
     "tlhabelelo",
     "hwidinyetša go la nngele/la go ja"
