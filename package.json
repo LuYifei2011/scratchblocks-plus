@@ -27,6 +27,7 @@
     "locales": "node locales-src/build-locales.js",
     "rollup": "rollup -c",
     "snapshots": "node ./snapshots/index.js",
+    "manual": "node ./snapshots/manual.js",
     "start": "rollup -c -m -w",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
   },
@@ -51,6 +52,7 @@
     "lint-staged": "^17.0.7",
     "prettier": "^3.8.3",
     "prettier-package-json": "^2.8.0",
+    "puppeteer": "^25.1.0",
     "rollup": "^4.61.1",
     "rollup-plugin-license": "^3.7.1",
     "rollup-plugin-serve": "^3.0.0",
