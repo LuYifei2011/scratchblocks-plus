@@ -95,12 +95,12 @@
     "DATA_REPLACEITEMOFLIST": "%2 리스트의 %1 번째 항목을 %3 으로 바꾸기",
     "DATA_SHOWLIST": "%1 리스트 보이기",
     "DATA_HIDELIST": "%1 리스트 숨기기",
-    "SENSING_OF_XPOSITION": "x좌표",
-    "SENSING_OF_YPOSITION": "y좌표",
-    "SENSING_OF_DIRECTION": "방향",
+    "MOTION_XPOSITION": "x좌표",
+    "MOTION_YPOSITION": "y좌표",
+    "MOTION_DIRECTION": "방향",
     "SENSING_OF_COSTUMENUMBER": "모양 번호",
     "LOOKS_COSTUMENUMBERNAME": "모양 %1",
-    "SENSING_OF_SIZE": "크기",
+    "LOOKS_SIZE": "크기",
     "SENSING_OF_BACKDROPNAME": "배경 이름",
     "LOOKS_BACKDROPNUMBERNAME": "배경 %1",
     "SENSING_OF_BACKDROPNUMBER": "배경 번호",
@@ -122,6 +122,7 @@
     "SENSING_OF": "%2 의 %1",
     "SENSING_CURRENT": "현재 %1",
     "SENSING_DAYSSINCE2000": "2000년 이후 현재까지 날짜 수",
+    "SENSING_ONLINE": "온라인인가요?",
     "SENSING_USERNAME": "사용자 이름",
     "OPERATORS_ADD": "%1 + %2",
     "OPERATORS_SUBTRACT": "%1 - %2",
@@ -197,27 +198,27 @@
     "wedo2.whenTilted": "%1 방향으로 기울일 때",
     "wedo2.isTilted": "%1 방향으로 기울어졌는가?",
     "wedo2.getTiltAngle": "%1 방향으로 기울어진 각도",
-    "gdxfor.whenGesture": "when %1",
-    "gdxfor.whenForcePushedOrPulled": "when force sensor %1",
-    "gdxfor.getForce": "force",
-    "gdxfor.whenTilted": "when tilted %1",
-    "gdxfor.isTilted": "tilted %1?",
-    "gdxfor.getTilt": "tilt angle %1",
-    "gdxfor.isFreeFalling": "falling?",
-    "gdxfor.getSpin": "spin speed %1",
-    "gdxfor.getAcceleration": "acceleration %1",
-    "boost.motorOnFor": "turn motor %1 for %2 seconds",
-    "boost.motorOnForRotation": "turn motor %1 for %2 rotations",
-    "boost.motorOn": "turn motor %1 on",
-    "boost.motorOff": "turn motor %1 off",
-    "boost.setMotorPower": "set motor %1 speed to %2 %",
-    "boost.setMotorDirection": "set motor %1 direction %2",
-    "boost.getMotorPosition": "motor %1 position",
-    "boost.whenColor": "when %1 brick seen",
-    "boost.seeingColor": "seeing %1 brick?",
-    "boost.whenTilted": "when tilted %1",
-    "boost.getTiltAngle": "tilt angle %1",
-    "boost.setLightHue": "set light color to %1"
+    "gdxfor.whenGesture": "%1 때",
+    "gdxfor.whenForcePushedOrPulled": "힘 센서가 %1 때",
+    "gdxfor.getForce": "힘",
+    "gdxfor.whenTilted": "%1 방향으로 기울어졌을 때",
+    "gdxfor.isTilted": "%1 방향으로 기울어졌는가?",
+    "gdxfor.getTilt": "기울어진 각도 %1",
+    "gdxfor.isFreeFalling": "낙하하고 있는가?",
+    "gdxfor.getSpin": "회전 속도 %1",
+    "gdxfor.getAcceleration": "가속도 %1",
+    "boost.motorOnFor": "모터 %1 를 %2 초 동안 돌리기",
+    "boost.motorOnForRotation": "모터 %1 를 %2 바퀴 동안 돌리기",
+    "boost.motorOn": "모터 %1 켜기",
+    "boost.motorOff": "모터 %1 끄기",
+    "boost.setMotorPower": "모터 %1 속도를 %2 %로 정하기",
+    "boost.setMotorDirection": "모터 %1 방향을 %2 으로 정하기",
+    "boost.getMotorPosition": "모터 %1 위치",
+    "boost.whenColor": "%1 브릭이 보일 때",
+    "boost.seeingColor": "%1 브릭이 보이는가?",
+    "boost.whenTilted": "%1 방향으로 기울일 때",
+    "boost.getTiltAngle": "%1 방향으로 기울어진 각도",
+    "boost.setLightHue": "빛의 색을 %1 (으)로 정하기"
   },
   "dropdowns": {
     "MOTION_GOTO_POINTER": {
@@ -1115,101 +1116,101 @@
       ]
     },
     "boost.motorDirection.backward": {
-      "value": "that way",
+      "value": "저쪽",
       "parents": [
         "boost.setMotorDirection"
       ]
     },
     "boost.motorDirection.forward": {
-      "value": "this way",
+      "value": "이쪽",
       "parents": [
         "boost.setMotorDirection"
       ]
     },
     "boost.motorDirection.reverse": {
-      "value": "reverse",
+      "value": "반대쪽",
       "parents": [
         "boost.setMotorDirection"
       ]
     },
     "boost.color.any": {
-      "value": "any color",
+      "value": "아무 색",
       "parents": [
         "boost.whenColor",
         "boost.seeingColor"
       ]
     },
     "boost.color.black": {
-      "value": "black",
+      "value": "검은색",
       "parents": [
         "boost.whenColor",
         "boost.seeingColor"
       ]
     },
     "boost.color.blue": {
-      "value": "blue",
+      "value": "파란색",
       "parents": [
         "boost.whenColor",
         "boost.seeingColor"
       ]
     },
     "boost.color.green": {
-      "value": "green",
+      "value": "초록색",
       "parents": [
         "boost.whenColor",
         "boost.seeingColor"
       ]
     },
     "boost.color.red": {
-      "value": "red",
+      "value": "빨간색",
       "parents": [
         "boost.whenColor",
         "boost.seeingColor"
       ]
     },
     "boost.color.white": {
-      "value": "white",
+      "value": "흰색",
       "parents": [
         "boost.whenColor",
         "boost.seeingColor"
       ]
     },
     "boost.color.yellow": {
-      "value": "yellow",
+      "value": "노란색",
       "parents": [
         "boost.whenColor",
         "boost.seeingColor"
       ]
     },
     "boost.tiltDirection.any": {
-      "value": "any",
+      "value": "아무",
       "parents": [
         "boost.whenTilted"
       ]
     },
     "boost.tiltDirection.up": {
-      "value": "up",
+      "value": "위쪽",
       "parents": [
         "boost.whenTilted",
         "boost.getTiltAngle"
       ]
     },
     "boost.tiltDirection.down": {
-      "value": "down",
+      "value": "아래쪽",
       "parents": [
         "boost.whenTilted",
         "boost.getTiltAngle"
       ]
     },
     "boost.tiltDirection.left": {
-      "value": "left",
+      "value": "왼쪽",
       "parents": [
         "boost.whenTilted",
         "boost.getTiltAngle"
       ]
     },
     "boost.tiltDirection.right": {
-      "value": "right",
+      "value": "오른쪽",
       "parents": [
         "boost.whenTilted",
         "boost.getTiltAngle"
@@ -1313,43 +1314,43 @@
       ]
     },
     "gdxfor.pulled": {
-      "value": "pulled",
+      "value": "당겨졌을",
       "parents": [
         "gdxfor.whenForcePushedOrPulled"
       ]
     },
     "gdxfor.pushed": {
-      "value": "pushed",
+      "value": "눌렸을",
       "parents": [
         "gdxfor.whenForcePushedOrPulled"
       ]
     },
     "gdxfor.shaken": {
-      "value": "shaken",
+      "value": "흔들어졌을",
       "parents": [
         "gdxfor.whenGesture"
       ]
     },
     "gdxfor.startedFalling": {
-      "value": "started falling",
+      "value": "낙하하기 시작했을",
       "parents": [
         "gdxfor.whenGesture"
       ]
     },
     "gdxfor.turnedFaceDown": {
-      "value": "turned face down",
+      "value": "아래쪽을 바라보도록 돌아갔을",
       "parents": [
         "gdxfor.whenGesture"
       ]
     },
     "gdxfor.turnedFaceUp": {
-      "value": "turned face up",
+      "value": "위쪽을 바라보도록 돌아갔을",
       "parents": [
         "gdxfor.whenGesture"
       ]
     },
     "gdxfor.tiltDirectionMenu.front": {
-      "value": "front",
+      "value": "앞쪽",
       "parents": [
         "gdxfor.whenTilted",
         "gdxfor.isTilted",
@@ -1357,7 +1358,7 @@
       ]
     },
     "gdxfor.tiltDirectionMenu.back": {
-      "value": "back",
+      "value": "뒤쪽",
       "parents": [
         "gdxfor.whenTilted",
         "gdxfor.isTilted",
@@ -1365,7 +1366,7 @@
       ]
     },
     "gdxfor.tiltDirectionMenu.left": {
-      "value": "left",
+      "value": "왼쪽",
       "parents": [
         "gdxfor.whenTilted",
         "gdxfor.isTilted",
@@ -1373,7 +1374,7 @@
       ]
     },
     "gdxfor.tiltDirectionMenu.right": {
-      "value": "right",
+      "value": "오른쪽",
       "parents": [
         "gdxfor.whenTilted",
         "gdxfor.isTilted",
@@ -1381,7 +1382,7 @@
       ]
     },
     "gdxfor.tiltDirectionMenu.any": {
-      "value": "any",
+      "value": "아무",
       "parents": [
         "gdxfor.whenTilted",
         "gdxfor.isTilted"

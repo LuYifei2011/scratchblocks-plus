@@ -27,6 +27,7 @@ import {
   rtlLanguages,
   iconPat,
   blockName,
+  aliasCategories,
 } from "./blocks.js"
 
 function paintBlock(info, children, languages) {
@@ -67,7 +68,11 @@ function paintBlock(info, children, languages) {
       ) {
         info.shape = type.shape
       }
-      info.category = type.category
+      if (aliasCategories[type.category]) {
+        info.category = aliasCategories[type.category]
+      } else {
+        info.category = type.category
+      }
       info.categoryIsDefault = true
       // store selector, used for translation among other things
       if (type.selector) {
@@ -862,7 +867,7 @@ function recogniseStuff(scripts) {
         const parts = []
         for (const child of outline.children) {
           if (child.isLabel) {
-            parts.push(child.value)
+            parts.push(child.value.replace(/%/g, "")) // see #581 - % is a special char, as seen below, and should be removed
           } else if (child.isBlock) {
             if (!child.info.argument) {
               return
