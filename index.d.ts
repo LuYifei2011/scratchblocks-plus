@@ -221,7 +221,6 @@ export interface RenderOptions {
  */
 export interface HighlightOptions {
   blink?: boolean
-  colorShift?: boolean
 }
 
 /**
