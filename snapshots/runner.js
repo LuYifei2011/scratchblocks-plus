@@ -17,6 +17,12 @@ export function test(style, name, source, lang) {
       source,
       lang: lang || "en",
     })
+    tests.push({
+      style: "scratch3-outline",
+      name,
+      source,
+      lang: lang || "en",
+    })
   }
 }
 

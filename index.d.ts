@@ -206,7 +206,12 @@ export interface DocumentView {
  * Options for rendering
  */
 export interface RenderOptions {
-  style?: "scratch2" | "scratch3" | "scratch3-high-contrast" | string
+  style?:
+    | "scratch2"
+    | "scratch3"
+    | "scratch3-high-contrast"
+    | "scratch3-outline"
+    | string
   inline?: boolean
   languages?: string[]
   scale?: number

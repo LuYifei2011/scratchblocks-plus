@@ -83,6 +83,13 @@ svg${name} .sb3-${category}-dark {
 }
 `
 
+const createOutlineRule = category => `
+svg.scratchblocks-style-scratch3-outline .sb3-input-boolean.sb3-${category}-dark {
+  fill: #fff;
+  stroke: ${originalStyle[category + "Tertiary"]};
+}
+`
+
 const create = (name, style) => `
 ${createRule("motion", name, style)}
 ${createRule("looks", name, style)}
@@ -123,6 +130,22 @@ svg${name} .sb3-custom-arg {
 svg${name} .sb3-extension-line {
   stroke: ${style.extensionSecondary};
 }
+`
+
+const createOutlineOverrides = () => `
+${createOutlineRule("motion")}
+${createOutlineRule("looks")}
+${createOutlineRule("sound")}
+${createOutlineRule("control")}
+${createOutlineRule("events")}
+${createOutlineRule("sensing")}
+${createOutlineRule("operators")}
+${createOutlineRule("variables")}
+${createOutlineRule("list")}
+${createOutlineRule("custom")}
+${createOutlineRule("extension")}
+${createOutlineRule("obsolete")}
+${createOutlineRule("grey")}
 `
 
 const originalStyle = {
@@ -250,7 +273,58 @@ const highContrastStyle = {
   greyTertiary: "#959595",
 }
 
+const createOutlineStyle = baseStyle => ({
+  ...baseStyle,
+  label: "#575e75",
+  inputColorStroke: "#575e75",
+  inputFill: "#fff",
+  literal: "#575e75",
+
+  motionPrimary: "#fff",
+  motionSecondary: "#f4f8ff",
+
+  looksPrimary: "#fff",
+  looksSecondary: "#f8f5ff",
+
+  soundPrimary: "#fff",
+  soundSecondary: "#fdf5fd",
+
+  controlPrimary: "#fff",
+  controlSecondary: "#fff8ed",
+
+  eventsPrimary: "#fff",
+  eventsSecondary: "#fff9e6",
+
+  sensingPrimary: "#fff",
+  sensingSecondary: "#f4fbfe",
+
+  operatorsPrimary: "#fff",
+  operatorsSecondary: "#f4fbf4",
+
+  variablesPrimary: "#fff",
+  variablesSecondary: "#fff7ef",
+
+  listPrimary: "#fff",
+  listSecondary: "#fff5ef",
+
+  customPrimary: "#fff",
+  customSecondary: "#fff5f7",
+
+  extensionPrimary: "#fff",
+  extensionSecondary: "#f2fcf9",
+
+  obsoletePrimary: "#fff",
+  obsoleteSecondary: "#fff5f5",
+
+  greyPrimary: "#fff",
+  greySecondary: "#f7f7f7",
+})
+
+const outlineStyle = createOutlineStyle(originalStyle)
+
 export default common +
   create("", originalStyle) +
   create(".scratchblocks-style-scratch3-high-contrast", highContrastStyle) +
+  create(".scratchblocks-style-scratch3-outline", outlineStyle) +
+  createOutlineOverrides() +
   commonOverride

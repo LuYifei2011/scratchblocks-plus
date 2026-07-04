@@ -102,7 +102,7 @@ scratchblocks.renderMatching('pre.blocks', {
 
 The `renderMatching()` function takes a CSS-style selector for the elements that contain scratchblocks code: we use `pre.blocks` to target `pre` tags with the class `blocks`.
 
-The `style` option controls how the blocks appear, either the Scratch 2 or Scratch 3 style is supported.
+The `style` option controls how the blocks appear. Supported built-in styles are `scratch2`, `scratch3`, `scratch3-high-contrast`, and `scratch3-outline`.
 
 ### Inline blocks
 

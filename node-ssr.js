@@ -66,7 +66,7 @@ export { parse }
  *
  * @param {string} code      - Scratch block source, e.g. "move (10) steps"
  * @param {object} [options] - Same options accepted by scratchblocks.render()
- *   - style:     "scratch3" | "scratch3-high-contrast" | "scratch2"  (default: "scratch3")
+ *   - style:     "scratch3" | "scratch3-high-contrast" | "scratch3-outline" | "scratch2"  (default: "scratch3")
  *   - languages: string[]  (default: ["en"])
  *   - scale:     number    (default: 1)
  * @returns {string} Complete SVG XML string

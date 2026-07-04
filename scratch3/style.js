@@ -16,6 +16,27 @@ const highContrastIcons = new Set([
   "translationBlock",
 ])
 
+const highContrastExtensionIcons = new Set([
+  "musicBlock",
+  "penBlock",
+  "videoBlock",
+  "faceSensingBlock",
+  "ttsBlock",
+  "translationBlock",
+])
+
+const highContrastExtensionIconIds = new Set(
+  [...highContrastExtensionIcons].map(name => `sb3-${name}-high-contrast`),
+)
+
+const outlineIcons = new Set([
+  "dropdownArrow",
+  "greenFlag",
+  "stopSign",
+  "list",
+  ...highContrastExtensionIcons,
+])
+
 export default class Style {
   static get cssContent() {
     return cssContent
@@ -401,6 +422,101 @@ export default class Style {
       }),
     ]
   }
+
+  static makeOutlineDropdownArrow() {
+    return SVG.setProps(
+      SVG.group([
+        SVG.el("path", {
+          d: "M12.71 2.44A2.41 2.41 0 0 1 12 4.16L8.08 8.08a2.45 2.45 0 0 1-3.45 0L.72 4.16A2.42 2.42 0 0 1 0 2.44 2.48 2.48 0 0 1 .71.71C1 .47 1.43 0 6.36 0s5.39.46 5.64.71a2.44 2.44 0 0 1 .71 1.73z",
+          fill: "#000",
+        }),
+        SVG.el("path", {
+          d: "M6.36 7.79a1.43 1.43 0 0 1-1-.42L1.42 3.45a1.44 1.44 0 0 1 0-2c.56-.56 9.31-.56 9.87 0a1.44 1.44 0 0 1 0 2L7.37 7.37a1.43 1.43 0 0 1-1.01.42z",
+          fill: "#fff",
+        }),
+      ]),
+      {
+        id: "sb3-dropdownArrow-outline",
+        transform: "scale(0.94413847364)", // 12 / 12.71
+      },
+    )
+  }
+
+  static makeOutlineGreenFlag() {
+    return SVG.setProps(
+      SVG.group([
+        SVG.el("path", {
+          d: "M20.8 3.7c-.4-.2-.9-.1-1.2.2-2 1.6-4.8 1.6-6.8 0-2.3-1.9-5.6-2.3-8.3-1v-.4c0-.6-.5-1-1-1s-1 .4-1 1v18.8c0 .5.5 1 1 1h.1c.5 0 1-.5 1-1v-6.4c1-.7 2.1-1.2 3.4-1.3 1.2 0 2.4.4 3.4 1.2 2.9 2.3 7 2.3 9.8 0 .3-.2.4-.5.4-.9V4.7c0-.5-.3-.9-.8-1zm-.3 10.2C18 16 14.4 16 11.9 14c-1.1-.9-2.5-1.4-4-1.4-1.2.1-2.3.5-3.4 1.1V4c2.5-1.4 5.5-1.1 7.7.6 2.4 1.9 5.7 1.9 8.1 0h.2l.1.1-.1 9.2z",
+          fill: "#45993d",
+        }),
+        SVG.el("path", {
+          d: "M20.6 4.8l-.1 9.1v.1c-2.5 2-6.1 2-8.6 0-1.1-.9-2.5-1.4-4-1.4-1.2.1-2.3.5-3.4 1.1V4c2.5-1.4 5.5-1.1 7.7.6 2.4 1.9 5.7 1.9 8.1 0h.2c0 .1.1.1.1.2z",
+          fill: "#fff",
+        }),
+      ]),
+      {
+        id: "sb3-greenFlag-outline",
+      },
+    )
+  }
+
+  static makeOutlineStopSign() {
+    return SVG.setProps(
+      SVG.el("polygon", {
+        points:
+          "6.6,0.5 13.12,0.5 19.5,6.6 19.5,13.12 13.12,19.5 6.6,19.5 0.5,13.12 0.5,6.6 ",
+        fill: "#fff",
+        stroke: "#b84848",
+        "stroke-width": 1.5,
+        "stroke-linejoin": "round",
+        "stroke-linecap": "round",
+      }),
+      {
+        id: "sb3-stopSign-outline",
+      },
+    )
+  }
+
+  static makeOutlineList() {
+    return SVG.setProps(
+      SVG.group([
+        SVG.el("rect", {
+          x: "0.75",
+          y: "0.75",
+          width: "13.5",
+          height: "16.5",
+          fill: "#fff",
+          stroke: "#ff920f",
+          "stroke-width": 1.5,
+        }),
+        SVG.el("rect", {
+          x: "3",
+          y: "3",
+          width: "9",
+          height: "2",
+          fill: "#ff920f",
+        }),
+        SVG.el("rect", {
+          x: "3",
+          y: "8",
+          width: "9",
+          height: "2",
+          fill: "#ff920f",
+        }),
+        SVG.el("rect", {
+          x: "3",
+          y: "13",
+          width: "9",
+          height: "2",
+          fill: "#ff920f",
+        }),
+      ]),
+      {
+        id: "sb3-list-outline",
+      },
+    )
+  }
+
   static makeOriginalIcons() {
     return [
       ...Style.makeCommonIcons(),
@@ -623,6 +739,21 @@ export default class Style {
         height: "40px",
         href: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAA21BMVEUAAAAAAAAAAAAAAADS0tIAAABHR0cAAADX19cAAAAAAACkpKRqamq2traurq6WlpbV1dWEhITHx8fPz8/Ly8vDw8O9vb0AAABMTEz////Z2dlXXnVMl//g4ODu7u7m5ub4+PhPmf/x8fH09PT6+vri4uNRmv/r6+1uqv/0+P9Ynv/p8v+rrrphZ33S5f+51v9ho/+1uMKBhpfH3v+Wmqhrcoacxf+Pvv/KzNSgpLGLkKDd6/+rzf9npv/AwsuDtv98s/90rv9jpP9GieeOrtm5ubl2fI7Z4u56otk5hEFfAAAAGXRSTlMAJhgM1wYyHvIkEWpBhXhc5U+uybyhk0YvleQYgwAABDpJREFUWMPtmNl6mzAQhQMCBAYbvLX1GIwxi7e2TtosTdKk+/L+T1QBVoQtJHDby5yLROYTPzOagSM4e9az6oVUrDgKxh39//Bwb+QBkTZ2VL3hypYilKWicpY6gmWcTCbxIoSh0xHjOkZXA4m0rlGcrcBsslcSmrYq4qm2GczmE6Hms6A8W4GQHZ1BTxXweuTCErGz1TEEaTpLymML6HVq87VhIWPRs21yNu679guNXn9hOnWVMUwanzxG0yCTdYQQts195umwJmnUDSatFHQRPaVvljkl4CAuRlWrCfD9uiZEbR+ObrnjfRDhwHUtdAi0gK/vLtts+VqDVfIMjZSmLEycBuD1D4kK8MHc+Ju3/FFQaHdXc4rBU/8NiCE+OJyAIQKuz32qjA7O1xzwqMtiUETAXeRzinZcyoPgsPpDcco3q9WD729WhTI/e1itbriUzwwtqPI0Q5et4ZoA6SDj1pCWOeB44qJ88aOiIB8j/xMH5IiUJwG+jfyHPMCNH20FQEpkPGnbnBeFuI78Fd82VWJCeTyQCzHb3pMCb8VAQhxBCkPKkzf2Z9J9mR9dCxqb3tBO17EoTw4ky0f0VXSnUCGE6LDp1tvlwK0cyNQMJA1DlL3Px8TenvTjpcAN5cD7VVSsoR992c4oS+aGcuDbzxFBfVqvv5L/375DCzeUAXfnOW5TJHudffvdzg3FwPdZvnbX6/LXr+9t3ZCzAAaMNh/X9BdAWzcUm9T2vnrpk91QbqOhLEDeDZuNHkBSX94Nm7ciAJOWAkW8WZIDl1MikAD57ZwceJsDL0VAfsPJwgzzO5cHvsmBb2IJkAlhB5InntlXlJcc8MO00GMzsHTbsMJDdU+hOxIeCfKuXYQu7ZJ5oDmExwPjfAEvyZ9lGyDW9tOWMH6l1z4nLwjrQ572RRugAvMS57mq4MH7czq9Kgpz1QZoDcI4DsHrWUjw4E1JbLeTSZ5z2gLYMTTwBnaOEwBvS1Ke86UUyF7isKpLrIHkSvVGBORdUQx8nFb0KAUy38aSCO8I510hMrhrBOrGEFIYGToPZM+Fn+XwiraiAMh2Uwnb+3DAC9Z/t3TIA2W7MwZkYbH+uZIC+f0jD3z9+vXF05hIAJTtcK3TLIDnMSLnhqeZlDo8eksYqH/3UskWPz7aCuDTX3urMiA5ejHCp7+YV4W9gxBnMFJP/XRwKNT3IEhLZpIGQMp86seNY6LlutRQgrFr6dLPLyELjm44eemIWt6C+JP0A1HffCIm4GDEw2jvpNTxbIwQ0kUTUYUYkgYTSXfMBU1Ee+G6fSwkOlpA/RFcJCR2erRHkllKSjNWhdd+NQbqkJrgunyPhKBIprpeiZyLZtEeCRNWQdlUZPU8yF1yYJ1J1HGGEC5iknS8pN0tRtoDDzTSNDLpqjMu2s4b9fBZg/TcJVHjrA7GSl/JZz7rWbX6A0ZzUfwVEqfrAAAAAElFTkSuQmCC",
       }),
+    ]
+  }
+
+  static makeOutlineIcons() {
+    const extensionIcons = Style.makeHighContrastIcons().filter(icon =>
+      highContrastExtensionIconIds.has(icon.getAttribute("id")),
+    )
+
+    return [
+      ...Style.makeOriginalIcons(),
+      Style.makeOutlineDropdownArrow(),
+      Style.makeOutlineGreenFlag(),
+      Style.makeOutlineStopSign(),
+      Style.makeOutlineList(),
+      ...extensionIcons,
     ]
   }
 
@@ -857,6 +988,12 @@ export default class Style {
   static iconName(name, iconStyle) {
     if (iconStyle === "high-contrast" && highContrastIcons.has(name)) {
       return `${name}-high-contrast`
+    }
+    if (iconStyle === "outline" && outlineIcons.has(name)) {
+      if (highContrastExtensionIcons.has(name)) {
+        return `${name}-high-contrast`
+      }
+      return `${name}-outline`
     }
 
     return name
