@@ -146,6 +146,18 @@ ${createOutlineRule("custom")}
 ${createOutlineRule("extension")}
 ${createOutlineRule("obsolete")}
 ${createOutlineRule("grey")}
+
+svg.scratchblocks-style-scratch3-outline .sb3-comment {
+  fill: #fff;
+  stroke: #000;
+}
+svg.scratchblocks-style-scratch3-outline .sb3-comment-line {
+  fill: #000;
+}
+svg.scratchblocks-style-scratch3-outline .sb3-comment-label,
+svg.scratchblocks-style-scratch3-outline .sb3-label.sb3-comment-label {
+  fill: #000;
+}
 `
 
 const originalStyle = {
@@ -275,10 +287,10 @@ const highContrastStyle = {
 
 const createOutlineStyle = baseStyle => ({
   ...baseStyle,
-  label: "#575e75",
-  inputColorStroke: "#575e75",
+  label: "#000",
+  inputColorStroke: "#000",
   inputFill: "#fff",
-  literal: "#575e75",
+  literal: "#000",
 
   motionPrimary: "#fff",
   motionSecondary: "#f4f8ff",
