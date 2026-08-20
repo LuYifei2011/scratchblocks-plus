@@ -906,6 +906,9 @@ export function applyOverrides(info, overrides) {
     } else if (overrideCategories.includes(name)) {
       info.category = name
       info.categoryIsDefault = false
+    } else if (name === "cat" && info.shape === "define-hat") {
+      info.shape = "define-cat"
+      info.shapeIsDefault = false
     } else if (overrideShapes.includes(name)) {
       info.shape = name
       info.shapeIsDefault = false
@@ -916,9 +919,6 @@ export function applyOverrides(info, overrides) {
     } else if (name === "reset") {
       info.categoryIsDefault = false
       info.isReset = true
-    } else if (name === "define") {
-      info.shape = info.shape === "cat" ? "define-cat" : "define-hat"
-      info.shapeIsDefault = false
     }
   }
 }

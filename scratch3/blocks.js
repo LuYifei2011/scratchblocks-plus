@@ -473,6 +473,7 @@ class BlockView {
       hat: SVG.hatRect,
       cat: SVG.catHat,
       "define-hat": SVG.procHatRect,
+      "define-cat": SVG.procCatRect,
       ring: SVG.pillRect,
     }
   }
@@ -517,6 +518,7 @@ class BlockView {
       hat: [24, 8, 17],
       cat: [24, 8, 49], // add 16*2 (see L435)
       "define-hat": [20, 16, 0],
+      "define-cat": [20, 16, 0],
       null: [4, 4, 0],
     }
   }
@@ -563,7 +565,8 @@ class BlockView {
   }
 
   draw(iconStyle) {
-    const isDefine = this.info.shape === "define-hat"
+    const isDefine =
+      this.info.shape === "define-hat" || this.info.shape === "define-cat"
     let children = this.children
     const isCommand = this.isCommand
 
@@ -764,6 +767,12 @@ class BlockView {
       SVG.setProps(group, {
         "data-block-path": this.block.blockPath,
       })
+    }
+
+    if (this.info.shape === "define-cat") {
+      // TODO properly handle this case
+      this.height += 16
+      return SVG.group([SVG.move(0, 16, group)]) // Wrap in group to ensure transform is not overridden
     }
 
     return group

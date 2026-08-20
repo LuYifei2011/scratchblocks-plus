@@ -277,13 +277,18 @@ export class Block {
     this.blockPath = null
 
     const shape = this.info.shape
-    this.isHat = shape === "hat" || shape === "cat" || shape === "define-hat"
+    this.isHat =
+      shape === "hat" ||
+      shape === "cat" ||
+      shape === "define-hat" ||
+      shape === "define-cat"
     this.hasPuzzle =
       shape === "stack" ||
       shape === "hat" ||
       shape === "cat" ||
       shape === "c-block" ||
-      shape === "define-hat"
+      shape === "define-hat" ||
+      shape === "define-cat"
     this.isFinal = /cap/.test(shape)
     this.isCommand = shape === "stack" || shape === "cap" || /block/.test(shape)
     this.isOutline = shape === "outline"
@@ -383,7 +388,7 @@ export class Block {
       if (overrides) {
         overrides += " "
       }
-      overrides += this.info.shape
+      overrides += this.info.shape === "define-cat" ? "cat" : this.info.shape
     }
     if (overrides) {
       text += ` :: ${overrides}`
