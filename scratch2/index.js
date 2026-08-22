@@ -9,4 +9,6 @@ export function init(window) {
 }
 
 export const makeStyle = style.makeStyle
-export { newView } from "./blocks.js"
+export const makeStyleString = style.makeStyleString
+export { newView, registerIconInfo } from "./blocks.js"
+export { registerIcon, registerCategoryStyle } from "./style.js"

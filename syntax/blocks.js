@@ -1,4 +1,4 @@
-import { extensions, aliasExtensions } from "./extensions.js"
+import { extensions, aliasExtensions, customExtensions } from "./extensions.js"
 
 // List of classes we're allowed to override.
 
@@ -25,6 +25,14 @@ export const aliasCategories = Object.assign(Object.create(null), {
   gray: "grey",
   other: "grey",
 })
+
+export function registerCategoryName(name, icon, aliases = []) {
+  overrideCategories.push(name)
+  for (const alias of aliases) {
+    aliasCategories[alias] = name
+  }
+  customExtensions[name] = { icon }
+}
 
 const overrideShapes = [
   "hat",
@@ -114,6 +122,36 @@ const allBlocks = scratchCommands.map(def => {
   return info
 })
 
+/**
+ * Registers a new block definition.
+ * @param {Object} block - The block definition.
+ * @param {string} block.id - The ID of the block.
+ * @param {string[]} [block.inputs] - The inputs for the block.
+ * @param {string} block.shape - The shape of the block.
+ * @param {string} block.category - The category of the block.
+ * @param {boolean} [block.hasLoopArrow] - Whether the block has a loop arrow.
+ */
+export function registerBlock({ id, inputs, shape, category, hasLoopArrow }) {
+  if (!id) {
+    throw new Error(`Missing ID`)
+  }
+
+  const info = {
+    id: id,
+    // spec: spec,
+    // parts: spec.split(splitPat).filter(x => x),
+    // selector: selector || `sb3:${id}`,
+    inputs: inputs == null ? [] : inputs,
+    shape: shape,
+    category: category,
+    hasLoopArrow: !!hasLoopArrow,
+  }
+  if (blocksById[info.id]) {
+    throw new Error(`Duplicate ID: ${info.id}`)
+  }
+  blocksById[info.id] = info
+}
+
 export const unicodeIcons = {
   "@greenFlag": "⚑",
   "@turnRight": "↻",
@@ -197,6 +235,29 @@ function loadLanguage(code, language) {
 }
 export function loadLanguages(languages) {
   Object.keys(languages).forEach(code => loadLanguage(code, languages[code]))
+}
+
+/**
+ * Registers a translation for a block in a specific language.
+ * @param {string} lang - The language code.
+ * @param {string} blockId - The ID of the block.
+ * @param {string} spec - The translated specification.
+ */
+export function registerBlockTranslation(lang, blockId, spec) {
+  if (!allLanguages[lang]) {
+    throw new Error(`Unknown language: ${lang}`)
+  }
+  const language = allLanguages[lang]
+  const block = blocksById[blockId]
+  if (!block) {
+    throw new Error(`Unknown block ID: ${blockId}`)
+  }
+  language.commands[blockId] = spec
+  const hash = hashSpec(spec)
+  if (!language.blocksByHash[hash]) {
+    language.blocksByHash[hash] = []
+  }
+  language.blocksByHash[hash].push(block)
 }
 
 export const english = {

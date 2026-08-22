@@ -37,6 +37,65 @@ const outlineIcons = new Set([
   ...highContrastExtensionIcons,
 ])
 
+const customCommonIcons = []
+const customHighContrastIcons = []
+const customHighContrastIconNames = new Set()
+function registerIcon(name, source, iconArray, suffix = "") {
+  const id = `sb3-${name}${suffix}`
+  if (source.type === "image") {
+    iconArray.push(() =>
+      SVG.setProps(
+        SVG.el("image", {
+          href: source.data,
+          width: source.width,
+          height: source.height,
+        }),
+        { id },
+      ),
+    )
+  } else if (source.type === "svg") {
+    iconArray.push(() => {
+      const svg = SVG.el("g")
+      svg.innerHTML = source.data
+      return SVG.setProps(svg, { id })
+    })
+  }
+}
+export function registerCommonIcon(name, source) {
+  registerIcon(name, source, customCommonIcons)
+}
+export function registerHighContrastIcon(name, source) {
+  registerIcon(name, source, customHighContrastIcons, "-high-contrast")
+  customHighContrastIconNames.add(name)
+}
+
+let customCssContent = ""
+/**
+ * Register a custom category style for scratch3.
+ * @param {string} name - The name of the category.
+ * @param {Object} style - The style object for the category.
+ * @param {string} style.primary - The primary color of the category.
+ * @param {string} style.secondary - The secondary color of the category.
+ * @param {string} style.tertiary - The tertiary color of the category.
+ * @param {string} [type="scratch3"] - The type of the style, can be "scratch3", "scratch3-high-contrast" or "scratch3-outline".
+ * @returns {void}
+ */
+export function registerCategoryStyle(name, style, type = "scratch3") {
+  const className = type === "scratch3" ? "" : `.scratchblocks-style-${type}`
+  customCssContent += `
+svg${className} .sb3-${name} {
+  fill: ${style.primary};
+  stroke: ${style.tertiary};
+}
+svg${className} .sb3-${name}-alt {
+  fill: ${style.secondary};
+}
+svg${className} .sb3-${name}-dark {
+  fill: ${style.tertiary};
+}
+`
+}
+
 export default class Style {
   static get cssContent() {
     return cssContent
@@ -420,6 +479,8 @@ export default class Style {
         height: "40px",
         href: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQBAMAAAB8P++eAAAAKlBMVEUAAAD///98h6Xm5+iVnrb/Zhq+w9L5hk73+Pnf4eSQmbLr7Ozo39vp184hSCf6AAAAAXRSTlMAQObYZgAAAOFJREFUSMftlDEOgjAUhonhAi1sLvIk7NDJDTYu0LhzBzcXruHoDTyFB/BCNi30KU3InzioSb++hAS+vPfKa5pEIpHvk7a8gpf8ISWINtlg4i7ZFOKVTBlqsUR+ItYZJG7VzQQgMqGYd7zWRArpULEAe5Q/J9JMj4rluC7uleNw7TFRXcoREDnlinjX57eUsvRTn8+AE0/6OKV0g5buYTTyWFFr/XAp3aDzed4yFJWnKbhPbtaXXohDNYlDJWz4zSxEokkkEjb496AiVtqAbIYgYNGWBmhgES+NX6SRSORfeAJMWajr95DdqQAAAABJRU5ErkJggg==",
       }),
+
+      ...customCommonIcons.map(icon => icon()),
     ]
   }
 
@@ -979,6 +1040,8 @@ export default class Style {
         height: "40px",
         href: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAxoAAARjCAMAAADfFKLnAAABhlBMVEUAAAALjWkOj2oLjmkAAAAQj2wkmnkYlHILj2kLjmkAAAAAAABsu6VouaIJjmgimncAAAAAAAALjml0v6kAAAAAAAAAAAAATzhjt6A9pogVk28XlHAVk28ZlHEAAAAAAAAAAAANj2oAAAAJj2oAAAAAAAByvahsu6VVsZcqnXwAAAAAAAAAAAAMj2oQkWsAAAAPkGwAAABHqo4AAAAclnMcl3MKj2kXlHIXk3EAAAALj2gAAAD///8AAAB9w6+ExrONyrmHyLWrzv/3+/r8/v6Fx7VpqP/0+fh7s/9Ml//4/PvK59/4+//u9f/l8P/V5v9vrP9an/9Smv/o6OjMzMwrKysDAwPp8//e7P+w0f+axf9xrf9kpf9jpP9ho/9Nl//e3t7E5Nu+4dfT09OUzb2QzLuZmZlMrJKGhoYpnHxlZWVgYGBCQkINDQ30+P/J4P/D3P+11P+Nvf90rv9Jlvby8vLc3Nyl1cik1ce+vr6DxrKlpaWfn58xnJZBpJWJiYl+fn4fHx9PedmHAAAAPHRSTlMAd4OAxg/0wohyDv78+Tj16Ik6+ux+WAb79e7mvbCemW1rZDYXC/n39PTw39u8t7RVNvX11NLDm5qOWx0x5AFdAAAGd0lEQVR42uzbV3faQBCG4XGChMEU4wLujntv6WXXIUAwxd3Gvfea3nv+eQaBcgS5ztV8zwWMfsB7js7uiAAAAAAAAP6fgKfCwRMg1l49OBzqJgC5DLfZO+nQa7oNovq2Ia2rJwhArFZ/QpVI+Fspr57b8BKAUAEzrgpmXhSHjBmgvDGtQwQglKdWFaU27KnWQ0TekEvruvYwAYh08ym3ML0ei8V2NvlnfZofn98gorC2DBKASFYaq8md9MLW1kJ6O7lqp9Hj0qzqFgGIxGlYtjeUepPkwU6D20AZIJidRmxhZnbxtTMN8rpQBshlpzGdTL2dTzjSYJEnBCCVnYaaS++uqb9pAEhnpzGXXFycn1PZo2g0ejpiL410EYBQhTRepnZTs2vz776f+yYd/EG3QQAiWVd+s+nNV/yX+NEQVyXiDS0EIFKNmeAEZlRe9jyuysSDNQQgkrsvo4qOfOofvgoCEMloNWs/cgNTx9FT+7RqaUV/KI7PcFoFYgVG+7iMxpbK+19UwU+tfyENEC/SvK+yAw8cdxy5XO53AmmAdI8bD/qbxh13HMv67Ex/RhogXVfzvQ6DHGlc6L09fYk0AJgjjalrza7fIw2QrjtSksZXfXFycqm/IQ0QrrPK5XWmcbWylD+/vUIaIFtnldaFNjx+lbd8qNjhMq78QDQug7l6eAwE46pMxsSiCAhVpy1hYu7y9cKM300AMoXbOQ5XyEvMaAn6opbjKQ7jkw9L6SBZSOsxe66pqLSMNnIb/hG8TYFk3mqt66nMw4Gs2m+OEIBgE9zGcFtZHeNN/Qe3OwhAsu5HQ3fq2qiU0XG3Cd+GAwAAAAD8YQ8OBAAAAACA/F8bQVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVYQ8OBAAAAACA/F8bQVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV2IMDAQAAAAAg/9dGUFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUV9uBAAAAAAADI/7URVFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVWFPTgQAAAAAADyf20EVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVhDw4EAAAAAID8XxtBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVXYgwMBAAAAACD/10ZQVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVRX24EAAAAAAAMj/tRFUVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVYU9OBAAAAAAAPJ/bQRVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVWEPDgQAAAAAgPxfG0FVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVdiDAwEAAAAAIP/XRlBVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVFfbgQAAAAAAAyP+1EVRVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVhT04EAAAAAAA8n9tBFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVYQ8OBAAAAACA/F8bQVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV2oNDAgAAAABB/1/7wgQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMArKwCvdMdAc1YAAAAASUVORK5CYII=",
       }),
+
+      ...customHighContrastIcons.map(icon => icon()),
     ]
   }
 
@@ -986,7 +1049,10 @@ export default class Style {
    * @return the icon name with suffix, if a high contrast icon is defined
    */
   static iconName(name, iconStyle) {
-    if (iconStyle === "high-contrast" && highContrastIcons.has(name)) {
+    if (
+      iconStyle === "high-contrast" &&
+      (highContrastIcons.has(name) || customHighContrastIconNames.has(name))
+    ) {
       return `${name}-high-contrast`
     }
     if (iconStyle === "outline" && outlineIcons.has(name)) {
@@ -1000,9 +1066,13 @@ export default class Style {
   }
 
   static makeStyle() {
-    const style = SVG.el("style")
-    style.appendChild(SVG.cdata(Style.cssContent))
+    const style = SVG.el("style", { id: "scratchblocks-scratch3-style" })
+    style.appendChild(SVG.cdata(Style.cssContent + customCssContent))
     return style
+  }
+
+  static makeStyleString() {
+    return Style.cssContent + customCssContent
   }
 
   static get defaultFont() {

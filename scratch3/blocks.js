@@ -9,6 +9,7 @@ import {
   Document,
   extensions,
   aliasExtensions,
+  customExtensions,
 } from "../syntax/index.js"
 
 import SVG from "./draw.js"
@@ -105,6 +106,11 @@ export class LabelView {
 LabelView.metricsCache = {}
 LabelView.toMeasure = []
 
+const customIcons = Object.create(null)
+export function registerIconInfo(name, width, height, dy = 0) {
+  customIcons[name] = { width, height, dy }
+}
+
 export class IconView {
   constructor(icon) {
     Object.assign(this, icon)
@@ -149,6 +155,7 @@ export class IconView {
       makeymakeyBlock: { width: 40, height: 40 },
       gdxforBlock: { width: 40, height: 40 },
       boostBlock: { width: 40, height: 40 },
+      ...customIcons,
     }
   }
 }
@@ -435,6 +442,12 @@ class BlockView {
         new IconView({ name: this.info.category + "Block" }),
       )
       this.info.category = "extension"
+    }
+    if (customExtensions[this.info.category]?.icon) {
+      this.children.unshift(new LineView())
+      this.children.unshift(
+        new IconView({ name: customExtensions[this.info.category].icon }),
+      )
     }
 
     this.x = 0
