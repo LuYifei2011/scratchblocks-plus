@@ -2,6 +2,43 @@ import SVG from "./draw.js"
 import Filter from "./filter.js"
 import cssContent from "./style.css.js"
 
+const customIcons = []
+export function registerIcon(name, source) {
+  if (source.type === "image") {
+    customIcons.push(() =>
+      SVG.setProps(
+        SVG.el("image", {
+          href: source.data,
+          width: source.width,
+          height: source.height,
+        }),
+        { id: name },
+      ),
+    )
+  } else if (source.type === "svg") {
+    customIcons.push(() => {
+      const svg = SVG.el("g")
+      svg.innerHTML = source.data
+      return SVG.setProps(svg, { id: name })
+    })
+  }
+}
+
+let customCssContent = ""
+/**
+ * Register a custom category style for scratch2.
+ * @param {string} name - The name of the category.
+ * @param {string} color - The color for the category.
+ * @returns {void}
+ */
+export function registerCategoryStyle(name, color) {
+  customCssContent += `
+.sb-${name} {
+  fill: ${color};
+}
+`
+}
+
 export default class Style {
   static get cssContent() {
     return cssContent
@@ -153,13 +190,19 @@ export default class Style {
           id: "list",
         },
       ),
+
+      ...customIcons.map(icon => icon()),
     ]
   }
 
   static makeStyle() {
-    const style = SVG.el("style")
-    style.appendChild(SVG.cdata(Style.cssContent))
+    const style = SVG.el("style", { id: "scratchblocks-scratch2-style" })
+    style.appendChild(SVG.cdata(Style.cssContent + customCssContent))
     return style
+  }
+
+  static makeStyleString() {
+    return Style.cssContent + customCssContent
   }
 
   static bevelFilter(id, inset) {

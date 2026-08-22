@@ -32,3 +32,5 @@ export const aliasExtensions = {
   wedo2: "wedo",
   text2speech: "tts",
 }
+
+export const customExtensions = Object.create(null)

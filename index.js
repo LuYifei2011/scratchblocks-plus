@@ -17,6 +17,10 @@ import {
   Comment,
   Script,
   Document,
+  registerIconName,
+  registerCategoryName,
+  registerBlock,
+  registerBlockTranslation,
 } from "./syntax/index.js"
 import * as scratch2 from "./scratch2/index.js"
 import * as scratch3 from "./scratch3/index.js"
@@ -30,6 +34,17 @@ export default function (window) {
   function appendStyles() {
     document.head.appendChild(scratch2.makeStyle())
     document.head.appendChild(scratch3.makeStyle())
+  }
+
+  function updateStyles() {
+    const style2 = document.getElementById("scratchblocks-scratch2-style")
+    if (style2) {
+      style2.textContent = scratch2.makeStyleString()
+    }
+    const style3 = document.getElementById("scratchblocks-scratch3-style")
+    if (style3) {
+      style3.textContent = scratch3.makeStyleString()
+    }
   }
 
   function newView(doc, options) {
@@ -195,6 +210,132 @@ export default function (window) {
     })
   }
 
+  /*****************************************************************************/
+
+  /*** Custom Extensions ***/
+
+  /**
+   * @typedef {Object} IconSource
+   * @property {"svg"|"image"} type - Source type.
+   * @property {string} data - SVG fragment, image URL, or data URI.
+   */
+
+  /**
+   * @typedef {Object} IconStyleInfo
+   * @property {number} width - Icon width.
+   * @property {number} height - Icon height.
+   * @property {number} [dy] - Vertical offset.
+   * @property {IconSource} source - Icon source.
+   */
+
+  /**
+   * Register a custom icon.
+   *
+   * @param {Object} options
+   * @param {string} options.name - Icon name.
+   * @param {boolean} [options.inline=false] - Whether the icon can be used with `@iconName`.
+   * @param {IconStyleInfo} [options.scratch2] - Scratch 2 icon info.
+   * @param {IconStyleInfo} [options.scratch3] - Scratch 3 icon info.
+   * @param {IconStyleInfo} [options.scratch3HighContrast] - Scratch 3 high contrast icon info.
+   *
+   * @example
+   * registerIcon({
+   *   name: "myIcon",
+   *   inline: true,
+   *   scratch3: {
+   *     width: 10,
+   *     height: 10,
+   *     source: {
+   *       type: "svg",
+   *       data: "<path d=\"...\" />"
+   *     }
+   *   }
+   * });
+   */
+  function registerIcon({
+    name,
+    inline,
+    scratch2: s2,
+    scratch3: s3,
+    scratch3HighContrast: s3HC,
+  }) {
+    if (inline) {
+      registerIconName(name)
+    }
+    if (s2) {
+      scratch2.registerIconInfo(name, s2.width, s2.height, s2.dy)
+      scratch2.registerIcon(name, {
+        with: s2.width,
+        height: s2.height,
+        ...s2.source,
+      })
+    }
+    if (s3) {
+      scratch3.registerIconInfo(name, s3.width, s3.height, s3.dy)
+      scratch3.registerCommonIcon(name, {
+        with: s3.width,
+        height: s3.height,
+        ...s3.source,
+      })
+    }
+    if (s3HC) {
+      scratch3.registerHighContrastIcon(name, {
+        with: s3HC.width,
+        height: s3HC.height,
+        ...s3HC.source,
+      })
+    }
+  }
+
+  /**
+   * @typedef {Object} Scratch3CategoryStyle
+   * @property {string} primary
+   * @property {string} secondary
+   * @property {string} tertiary
+   */
+
+  /**
+   * Register a custom extension category.
+   *
+   * @param {Object} options
+   * @param {string} options.name - The category name.
+   * @param {string} [options.icon] - The category icon name (must be registered via registerIcon).
+   * @param {string[]} [options.aliases]
+   * @param {Object} [options.styles]
+   * @param {string} [options.styles.scratch2] - The scratch2 color for the category.
+   * @param {Scratch3CategoryStyle} [options.styles.scratch3] - The scratch3 style for the category.
+   * @param {Scratch3CategoryStyle} [options.styles.scratch3HighContrast]
+   * @param {Scratch3CategoryStyle} [options.styles.scratch3Outline]
+   * @returns {void}
+   *
+   * @example
+   * registerCategory({
+   *   name: "my-extension",
+   *   icon: "my-extension-icon",
+   *   styles: {
+   *     scratch3: {
+   *       primary: "#ff6680",
+   *       secondary: "#ff4d6a",
+   *       tertiary: "#ff3355"
+   *     }
+   *   }
+   * });
+   */
+  function registerCategory({ name, icon, aliases, styles = {} }) {
+    registerCategoryName(name, icon, aliases)
+    for (const [styleName, style] of Object.entries(styles)) {
+      if (styleName === "scratch2") {
+        scratch2.registerCategoryStyle(name, style)
+      } else if (styleName === "scratch3HighContrast") {
+        scratch3.registerCategoryStyle(name, style, "scratch3-high-contrast")
+      } else if (styleName === "scratch3Outline") {
+        scratch3.registerCategoryStyle(name, style, "scratch3-outline")
+      } else if (styleName.startsWith("scratch3")) {
+        scratch3.registerCategoryStyle(name, style, styleName)
+      }
+    }
+  }
+
   return {
     allLanguages: allLanguages, // read-only
     loadLanguages: loadLanguages,
@@ -219,11 +360,18 @@ export default function (window) {
     renderMatching: renderMatching,
 
     appendStyles: appendStyles,
+    updateStyles: updateStyles,
 
     // Highlight API
     highlightBlock: highlightBlock,
     clearHighlight: clearHighlight,
     getBlockByPath: getBlockByPath,
     getElementByPath: getElementByPath,
+
+    // Custom Extensions
+    registerIcon: registerIcon,
+    registerCategory: registerCategory,
+    registerBlock: registerBlock,
+    registerBlockTranslation: registerBlockTranslation,
   }
 }

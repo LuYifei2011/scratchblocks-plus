@@ -10,8 +10,20 @@ export {
   Glow,
   Script,
   Document,
+  registerIconName,
 } from "./model.js"
 
-export { allLanguages, loadLanguages } from "./blocks.js"
+export {
+  allLanguages,
+  loadLanguages,
+  registerCategoryName,
+  registerBlock,
+  registerBlockTranslation,
+} from "./blocks.js"
 
-export { extensions, movedExtensions, aliasExtensions } from "./extensions.js"
+export {
+  extensions,
+  movedExtensions,
+  aliasExtensions,
+  customExtensions,
+} from "./extensions.js"

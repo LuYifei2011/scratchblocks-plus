@@ -84,6 +84,11 @@ export class Label {
   }
 }
 
+const customIcons = Object.create(null)
+export function registerIconName(name) {
+  customIcons[name] = true
+}
+
 export class Icon {
   constructor(name) {
     this.name = name
@@ -105,6 +110,7 @@ export class Icon {
       addInput: true,
       delInput: true,
       list: true,
+      ...customIcons,
     }
   }
 

@@ -97,6 +97,11 @@ export class LabelView {
 LabelView.metricsCache = {}
 LabelView.toMeasure = []
 
+const customIcons = Object.create(null)
+export function registerIconInfo(name, width, height, dy = 0) {
+  customIcons[name] = { width, height, dy }
+}
+
 class IconView {
   constructor(icon) {
     Object.assign(this, icon)
@@ -129,6 +134,7 @@ class IconView {
       addInput: { width: 4, height: 8 },
       delInput: { width: 4, height: 8 },
       list: { width: 12, height: 14 },
+      ...customIcons,
     }
   }
 }
