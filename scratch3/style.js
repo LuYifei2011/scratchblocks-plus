@@ -1067,12 +1067,13 @@ export default class Style {
 
   static makeStyle() {
     const style = SVG.el("style", { id: "scratchblocks-scratch3-style" })
-    style.appendChild(SVG.cdata(Style.cssContent + customCssContent))
+    // Keep the base stylesheet last so its general rules retain cascade priority.
+    style.appendChild(SVG.cdata(customCssContent + Style.cssContent))
     return style
   }
 
   static makeStyleString() {
-    return Style.cssContent + customCssContent
+    return customCssContent + Style.cssContent
   }
 
   static get defaultFont() {
