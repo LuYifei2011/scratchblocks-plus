@@ -82,6 +82,15 @@ let customCssContent = ""
  */
 export function registerCategoryStyle(name, style, type = "scratch3") {
   const className = type === "scratch3" ? "" : `.scratchblocks-style-${type}`
+  const outlineBooleanRule =
+    type === "scratch3-outline"
+      ? `
+svg${className} .sb3-input-boolean.sb3-${name}-dark {
+  fill: #fff;
+  stroke: ${style.tertiary};
+}
+`
+      : ""
   customCssContent += `
 svg${className} .sb3-${name} {
   fill: ${style.primary};
@@ -93,7 +102,7 @@ svg${className} .sb3-${name}-alt {
 svg${className} .sb3-${name}-dark {
   fill: ${style.tertiary};
 }
-`
+${outlineBooleanRule}`
 }
 
 export default class Style {
