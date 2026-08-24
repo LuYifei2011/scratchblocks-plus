@@ -315,7 +315,6 @@ export class Block {
   }
 
   _stringify(extras) {
-    let firstInput = null
     let checkAlias = false
     let currentLinePrefix = ""
     let text = this.children
@@ -323,10 +322,6 @@ export class Block {
         if (child.isIcon) {
           checkAlias = true
         }
-        if (!firstInput && !(child.isLabel || child.isIcon)) {
-          firstInput = child
-        }
-
         if (child.isScript) {
           currentLinePrefix = ""
           return child.isEmpty
@@ -362,15 +357,32 @@ export class Block {
     }
 
     const lang = this.info.language
-    if (checkAlias && lang && this.info.selector) {
+    if (checkAlias && lang) {
       const aliases = lang.nativeAliases[this.info.id]
       if (aliases && aliases.length) {
         let alias = aliases[0]
-        // TODO make translate() not in-place, and use that
-        if (inputPat.test(alias) && firstInput) {
-          alias = alias.replace(inputPat, firstInput._stringify())
-        }
-        return alias
+        // translate() replaces an alias with the canonical icon spec in-place.
+        // Rebuild the textual alias while preserving translated input order.
+        // TODO make translate() not in-place, and preserve the matched alias.
+        const rawArgs = this.children.filter(
+          child => !child.isLabel && !child.isIcon && !child.isScript,
+        )
+        const nativeInputOrder = parseSpec(
+          lang.commands[this.info.id] || this.info.spec || "",
+        )
+          .parts.map(part => parseInputNumber(part))
+          .filter(number => number)
+        const argsByNumber = Object.create(null)
+        nativeInputOrder.forEach((number, index) => {
+          argsByNumber[number] = rawArgs[index]
+        })
+        let nextArg = 0
+        alias = alias.replace(new RegExp(inputPat.source, "g"), part => {
+          const number = parseInputNumber(part)
+          const arg = number ? argsByNumber[number] : rawArgs[nextArg++]
+          return arg ? arg._stringify() : part
+        })
+        text = alias
       }
     }
 

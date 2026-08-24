@@ -126,19 +126,27 @@ const allBlocks = scratchCommands.map(def => {
  * Registers a new block definition.
  * @param {Object} block - The block definition.
  * @param {string} block.id - The ID of the block.
+ * @param {string} [block.spec] - The canonical English specification of the block.
  * @param {string[]} [block.inputs] - The inputs for the block.
  * @param {string} block.shape - The shape of the block.
  * @param {string} block.category - The category of the block.
  * @param {boolean} [block.hasLoopArrow] - Whether the block has a loop arrow.
  */
-export function registerBlock({ id, inputs, shape, category, hasLoopArrow }) {
+export function registerBlock({
+  id,
+  spec,
+  inputs,
+  shape,
+  category,
+  hasLoopArrow,
+}) {
   if (!id) {
     throw new Error(`Missing ID`)
   }
 
   const info = {
     id: id,
-    // spec: spec,
+    spec: spec, // Used to restore canonical icons after matching an alias.
     // parts: spec.split(splitPat).filter(x => x),
     // selector: selector || `sb3:${id}`,
     inputs: inputs == null ? [] : inputs,
@@ -242,8 +250,9 @@ export function loadLanguages(languages) {
  * @param {string} lang - The language code.
  * @param {string} blockId - The ID of the block.
  * @param {string} spec - The translated specification.
+ * @param {string[]} [aliases] - Alternative specifications which should resolve to this block.
  */
-export function registerBlockTranslation(lang, blockId, spec) {
+export function registerBlockTranslation(lang, blockId, spec, aliases = []) {
   if (!allLanguages[lang]) {
     throw new Error(`Unknown language: ${lang}`)
   }
@@ -253,11 +262,33 @@ export function registerBlockTranslation(lang, blockId, spec) {
     throw new Error(`Unknown block ID: ${blockId}`)
   }
   language.commands[blockId] = spec
-  const hash = hashSpec(spec)
-  if (!language.blocksByHash[hash]) {
-    language.blocksByHash[hash] = []
+  const addSpec = value => {
+    const hash = hashSpec(value)
+    if (!language.blocksByHash[hash]) {
+      language.blocksByHash[hash] = []
+    }
+    if (!language.blocksByHash[hash].includes(block)) {
+      language.blocksByHash[hash].push(block)
+    }
   }
-  language.blocksByHash[hash].push(block)
+  addSpec(spec)
+
+  for (const alias of aliases) {
+    if (typeof alias !== "string" || alias === spec) {
+      continue
+    }
+    const existing = language.aliases[alias]
+    if (!existing) {
+      language.aliases[alias] = blockId
+    }
+    addSpec(alias)
+    if (!language.nativeAliases[blockId]) {
+      language.nativeAliases[blockId] = []
+    }
+    if (!language.nativeAliases[blockId].includes(alias)) {
+      language.nativeAliases[blockId].push(alias)
+    }
+  }
 }
 
 export const english = {
