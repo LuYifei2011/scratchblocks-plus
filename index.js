@@ -265,7 +265,7 @@ export default function (window) {
     if (s2) {
       scratch2.registerIconInfo(name, s2.width, s2.height, s2.dy)
       scratch2.registerIcon(name, {
-        with: s2.width,
+        width: s2.width,
         height: s2.height,
         ...s2.source,
       })
@@ -273,14 +273,14 @@ export default function (window) {
     if (s3) {
       scratch3.registerIconInfo(name, s3.width, s3.height, s3.dy)
       scratch3.registerCommonIcon(name, {
-        with: s3.width,
+        width: s3.width,
         height: s3.height,
         ...s3.source,
       })
     }
     if (s3HC) {
       scratch3.registerHighContrastIcon(name, {
-        with: s3HC.width,
+        width: s3HC.width,
         height: s3HC.height,
         ...s3HC.source,
       })
