@@ -1,6 +1,5 @@
 locales-src/
 tests/
-build/
 snapshots/
 .*
 index.html
