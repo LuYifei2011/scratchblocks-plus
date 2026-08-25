@@ -69,6 +69,7 @@ export { parse }
  *   - style:     "scratch3" | "scratch3-high-contrast" | "scratch3-outline" | "scratch2"  (default: "scratch3")
  *   - languages: string[]  (default: ["en"])
  *   - scale:     number    (default: 1)
+ *   - fontFamily: string   CSS font-family value (default: style font)
  * @returns {string} Complete SVG XML string
  */
 export function renderToSVGString(code, options = {}) {

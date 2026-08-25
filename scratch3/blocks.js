@@ -53,8 +53,13 @@ function removeClass(el, className) {
 }
 
 export class LabelView {
-  constructor(label) {
+  constructor(label, options) {
     Object.assign(this, label)
+
+    this.fontFamily =
+      typeof options?.fontFamily === "string"
+        ? options.fontFamily.trim() || null
+        : null
 
     this.el = null
     this.height = 12
@@ -79,18 +84,30 @@ export class LabelView {
     const cls = `sb3-${this.cls}`
     this.el = SVG.text(0, 13.1, value, {
       class: `sb3-label ${cls}`,
+      style: this.fontFamily ? `font-family: ${this.fontFamily}` : null,
     })
+
+    const font = /comment-label/.test(this.cls)
+      ? this.fontFamily
+        ? `400 12pt ${this.fontFamily}`
+        : commentFont
+      : this.fontFamily
+        ? `500 12pt ${this.fontFamily}`
+        : defaultFont
 
     let cache = LabelView.metricsCache[cls]
     if (!cache) {
       cache = LabelView.metricsCache[cls] = Object.create(null)
     }
+    let fontCache = cache[font]
+    if (!fontCache) {
+      fontCache = cache[font] = Object.create(null)
+    }
 
-    if (Object.hasOwnProperty.call(cache, value)) {
-      this.metrics = cache[value]
+    if (Object.hasOwnProperty.call(fontCache, value)) {
+      this.metrics = fontCache[value]
     } else {
-      const font = /comment-label/.test(this.cls) ? commentFont : defaultFont
-      this.metrics = cache[value] = LabelView.measure(value, font)
+      this.metrics = fontCache[value] = LabelView.measure(value, font)
       // TODO: word-spacing? (fortunately it seems to have no effect!)
     }
   }
@@ -264,10 +281,10 @@ export class MatrixView {
 }
 
 export class InputView {
-  constructor(input) {
+  constructor(input, options) {
     Object.assign(this, input)
     if (input.label) {
-      this.label = newView(input.label)
+      this.label = newView(input.label, options)
     }
     // Create MatrixView if value is a Matrix
     if (input.value && input.value.isMatrix) {
@@ -420,10 +437,10 @@ export class InputView {
 }
 
 class BlockView {
-  constructor(block) {
+  constructor(block, options) {
     Object.assign(this, block)
-    this.children = block.children.map(newView)
-    this.comment = this.comment ? newView(this.comment) : null
+    this.children = block.children.map(child => newView(child, options))
+    this.comment = this.comment ? newView(this.comment, options) : null
     this.isRound = this.isReporter
 
     // Store the original block for path reference
@@ -793,9 +810,9 @@ class BlockView {
 }
 
 export class CommentView {
-  constructor(comment) {
+  constructor(comment, options) {
     Object.assign(this, comment)
-    this.label = newView(comment.label)
+    this.label = newView(comment.label, options)
 
     this.width = null
   }
@@ -831,9 +848,9 @@ export class CommentView {
 }
 
 class GlowView {
-  constructor(glow) {
+  constructor(glow, options) {
     Object.assign(this, glow)
-    this.child = newView(glow.child)
+    this.child = newView(glow.child, options)
 
     this.width = null
     this.height = null
@@ -883,9 +900,9 @@ class GlowView {
 }
 
 class ScriptView {
-  constructor(script) {
+  constructor(script, options) {
     Object.assign(this, script)
-    this.blocks = script.blocks.map(newView)
+    this.blocks = script.blocks.map(block => newView(block, options))
 
     this.y = 0
   }
@@ -948,7 +965,7 @@ class ScriptView {
 class DocumentView {
   constructor(doc, options) {
     Object.assign(this, doc)
-    this.scripts = doc.scripts.map(newView)
+    this.scripts = doc.scripts.map(script => newView(script, options))
 
     // Store reference to original document for block lookup
     this.doc = doc
