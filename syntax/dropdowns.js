@@ -604,10 +604,8 @@ function getSpokenLanguageMenu(lang, languageNames, localeNames) {
   const localizedNameMap = {}
   let nameArray = languageNames.menuMap[lang]
   if (nameArray) {
-    let spokenNameArray = []
     if (languageNames.spokenLanguages) {
-      spokenNameArray = languageNames.spokenLanguages[lang]
-      nameArray = nameArray.concat(spokenNameArray)
+      nameArray = nameArray.concat(languageNames.spokenLanguages[lang])
     }
     nameArray.forEach(lang => {
       localizedNameMap[lang.code] = lang.name
