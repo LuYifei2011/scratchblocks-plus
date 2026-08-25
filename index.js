@@ -68,10 +68,14 @@ export default function (window) {
     if (typeof options === "function") {
       throw new Error("render() no longer takes a callback")
     }
+    options = {
+      style: "scratch2",
+      ...options,
+    }
     const view = newView(doc, options)
     const svg = view.render()
     // Used in high contrast theme
-    svg.classList.add(`scratchblocks-style-${options.style}`)
+    svg.setAttribute("class", `scratchblocks-style-${options.style}`)
     return svg
   }
 
@@ -153,6 +157,10 @@ export default function (window) {
 
   // insert 'svg' into 'el', with appropriate wrapper elements
   function replace(el, svg, doc, options) {
+    options = {
+      inline: false,
+      ...options,
+    }
     let container
     if (options.inline) {
       container = document.createElement("span")

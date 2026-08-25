@@ -16,6 +16,7 @@ export {
 export {
   allLanguages,
   loadLanguages,
+  blockName,
   registerCategoryName,
   registerBlock,
   registerBlockTranslation,
