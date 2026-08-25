@@ -77,8 +77,15 @@ import scratchblocks from "scratchblocks-plus"
 scratchblocks.renderMatching("pre.blocks", {
   style: "scratch3",
   languages: ["en"],
+  // fontFamily: '"Noto Sans SC", sans-serif',
 })
 ```
+
+Use `fontFamily` to override the font family for all block labels, input
+values, and comments in that render. The value uses CSS `font-family` syntax;
+load the font before rendering, for example by waiting for
+`document.fonts.ready`. If the option is omitted or empty, each style keeps its
+default fonts.
 
 The ESM entry does not create `window.scratchblocks`. Import the default export
 wherever it is needed.
@@ -109,8 +116,12 @@ import { renderToSVGString } from "scratchblocks-plus/node-ssr"
 
 const svg = renderToSVGString("move (10) steps", {
   style: "scratch3",
+  fontFamily: '"Noto Sans SC", sans-serif',
 })
 ```
+
+For custom fonts in Node.js, register the font with the selected Canvas
+implementation before rendering so SVG layout measurement uses the same font.
 
 ### Syntax-only parsing
 
