@@ -1,7 +1,38 @@
 /**
+ * Runtime node markers used by the parser and renderer.
+ * Non-matching markers are absent at runtime and therefore typed as optional
+ * false values.
+ */
+export interface SyntaxNodeFlags<
+  Kind extends
+    | "label"
+    | "icon"
+    | "input"
+    | "matrix"
+    | "block"
+    | "comment"
+    | "glow"
+    | "script",
+> {
+  readonly [marker: `is${string}`]: boolean | undefined
+  readonly isLabel?: Kind extends "label" ? true : false
+  readonly isIcon?: Kind extends "icon" ? true : false
+  readonly isInput?: Kind extends "input" ? true : false
+  readonly isMatrix?: Kind extends "matrix"
+    ? true
+    : Kind extends "input"
+      ? boolean
+      : false
+  readonly isBlock?: Kind extends "block" ? true : false
+  readonly isComment?: Kind extends "comment" ? true : false
+  readonly isGlow?: Kind extends "glow" ? true : false
+  readonly isScript?: Kind extends "script" ? true : false
+}
+
+/**
  * A label/text element in a block
  */
-export interface Label {
+export interface Label extends SyntaxNodeFlags<"label"> {
   value: string
   cls: string
   el: SVGElement | null
@@ -15,7 +46,7 @@ export interface Label {
 /**
  * An icon in a block (e.g., greenFlag, stopSign)
  */
-export interface Icon {
+export interface Icon extends SyntaxNodeFlags<"icon"> {
   name: string
   isArrow: boolean
   readonly isIcon: true
@@ -50,7 +81,7 @@ export interface BlockInfo {
 /**
  * An input element in a block (text input, dropdown, etc.)
  */
-export interface Input {
+export interface Input extends SyntaxNodeFlags<"input"> {
   shape: string
   value: string | number | boolean | Matrix | null | undefined
   menu?: string
@@ -74,7 +105,7 @@ export interface Input {
 /**
  * A matrix element in a block
  */
-export interface Matrix {
+export interface Matrix extends SyntaxNodeFlags<"matrix"> {
   rows: boolean[][]
   readonly isMatrix: true
   stringify(): string
@@ -84,9 +115,9 @@ export interface Matrix {
 /**
  * A block definition
  */
-export interface Block {
+export interface Block extends SyntaxNodeFlags<"block"> {
   info: BlockInfo
-  children: (Label | Icon | Input | Block | Script | Comment | Glow)[]
+  children: BlockChild[]
   comment: Comment | null
   diff: "+" | "-" | null
   blockPath: string | null
@@ -109,7 +140,7 @@ export interface Block {
 /**
  * A comment element
  */
-export interface Comment {
+export interface Comment extends SyntaxNodeFlags<"comment"> {
   label: Label
   width: number | null
   hasBlock?: boolean
@@ -120,7 +151,7 @@ export interface Comment {
 /**
  * A glow effect (highlight) wrapper for blocks
  */
-export interface Glow {
+export interface Glow extends SyntaxNodeFlags<"glow"> {
   child: Block | Script
   shape: string
   info?: BlockInfo
@@ -132,8 +163,8 @@ export interface Glow {
 /**
  * A script (sequence of blocks)
  */
-export interface Script {
-  blocks: Block[]
+export interface Script extends SyntaxNodeFlags<"script"> {
+  blocks: ScriptBlock[]
   isEmpty: boolean
   isFinal: boolean
   scriptIndex: number | null
@@ -141,6 +172,12 @@ export interface Script {
   stringify(): string
   translate(lang: LanguageData): void
 }
+
+export type BlockChild = Label | Icon | Input | Block | Script | Comment | Glow
+
+export type ScriptBlock = Block | Glow
+
+export type SyntaxNode = BlockChild | Matrix
 
 /**
  * A parsed document containing scripts
@@ -153,7 +190,7 @@ export interface Document {
   translate(lang: LanguageData): void
 }
 
-export interface ScriptView {
+export interface ScriptView extends SyntaxNodeFlags<"script"> {
   blocks: Array<Block | Glow>
   isEmpty: boolean
   isFinal: boolean
@@ -266,11 +303,7 @@ export interface MatrixConstructor {
 }
 
 export interface BlockConstructor {
-  new (
-    info: BlockInfo,
-    children: (Label | Icon | Input | Block | Script | Comment | Glow)[],
-    comment?: Comment | null,
-  ): Block
+  new (info: BlockInfo, children: BlockChild[], comment?: Comment | null): Block
 }
 
 export interface CommentConstructor {
@@ -282,7 +315,7 @@ export interface GlowConstructor {
 }
 
 export interface ScriptConstructor {
-  new (blocks: Block[]): Script
+  new (blocks: ScriptBlock[]): Script
 }
 
 export interface DocumentConstructor {

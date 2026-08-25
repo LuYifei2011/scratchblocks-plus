@@ -23,10 +23,14 @@ import type {
 } from "../index.js"
 
 export type {
+  BlockChild,
   BlockInfo,
   LanguageData,
   RegisterBlockOptions,
   RenderOptions,
+  ScriptBlock,
+  SyntaxNode,
+  SyntaxNodeFlags,
 } from "../index.js"
 
 export type Label = LabelInstance
