@@ -30,7 +30,24 @@ Make pictures of Scratch blocks from text.
 - basic TypeScript support
 - and more!
 
-**scratchblocks-plus** is compatible with **scratchblocks**, so you can use it as a drop-in replacement.
+### Compatibility with scratchblocks
+
+**scratchblocks-plus** follows the core text syntax and common browser APIs of
+**scratchblocks 3.x**, including `parse`, `render`, `renderMatching`, and
+`loadLanguages`. Most browser integrations can migrate by changing the package
+or script name.
+
+It is not a complete package-level drop-in replacement:
+
+- scratchblocks-plus is ESM-first and does not support CommonJS `require()`;
+- the root package entry is browser-only because it uses `window` and the DOM;
+- Node.js rendering and syntax-only parsing use dedicated package subpaths;
+- internal modules and exact generated SVG markup are not compatibility
+  guarantees.
+
+The classic script build still creates `window.scratchblocks`, so existing
+browser code that uses the documented scratchblocks API generally remains
+compatible.
 
 ---
 
@@ -41,6 +58,85 @@ It's MIT licensed, so you can use it in your projects.
 For the full guide to the syntax, see [the wiki](https://en.scratch-wiki.info/wiki/Block_Plugin/Syntax).
 
 # Usage
+
+## ESM (recommended)
+
+Install the package from npm:
+
+```sh
+npm install scratchblocks-plus
+```
+
+The root entry is intended for browser applications and bundlers. It
+default-exports the initialized scratchblocks API and automatically adds the
+required styles to the page:
+
+```js
+import scratchblocks from "scratchblocks-plus"
+
+scratchblocks.renderMatching("pre.blocks", {
+  style: "scratch3",
+  languages: ["en"],
+})
+```
+
+The ESM entry does not create `window.scratchblocks`. Import the default export
+wherever it is needed.
+
+To load every bundled locale in an ESM application:
+
+```js
+import scratchblocks from "scratchblocks-plus"
+import locales from "scratchblocks-plus/locales/all"
+
+scratchblocks.loadLanguages(locales)
+```
+
+The all-locales entry is large. Import individual locale JSON files when your
+bundler supports JSON modules and you only need a few languages.
+
+### Node.js rendering
+
+Use the dedicated SSR entry instead of the browser root. Install a DOM and
+canvas implementation alongside scratchblocks-plus:
+
+```sh
+npm install scratchblocks-plus @xmldom/xmldom @napi-rs/canvas
+```
+
+```js
+import { renderToSVGString } from "scratchblocks-plus/node-ssr"
+
+const svg = renderToSVGString("move (10) steps", {
+  style: "scratch3",
+})
+```
+
+### Syntax-only parsing
+
+Parsing and document analysis do not require a DOM or canvas implementation:
+
+```js
+import { parse } from "scratchblocks-plus/syntax"
+
+const document = parse("move (10) steps")
+const block = document.scripts[0].blocks[0]
+
+console.log(block.info.id) // "MOTION_MOVESTEPS"
+```
+
+TypeScript model names are available as type-only exports from the browser
+entry:
+
+```ts
+import scratchblocks, {
+  type Block,
+  type Document,
+} from "scratchblocks-plus"
+
+const document: Document = scratchblocks.parse("move (10) steps")
+const block: Block = document.scripts[0].blocks[0]
+```
 
 <!--
 ## MediaWiki
@@ -65,7 +161,10 @@ This would probably be a good way to write a Scratch book.
 
 Use the [scratchblocks-plus-react](https://github.com/LuYifei2011/scratchblocks-plus-react) package to render scratchblocks in React.
 
-## HTML
+## Classic HTML script
+
+ESM is recommended for new projects. The classic IIFE build remains available
+for pages that use a global `window.scratchblocks` object.
 
 You'll need to include a copy of the scratchblocks-plus JS file on your webpage.
 There are a few ways of getting one:
@@ -75,7 +174,7 @@ There are a few ways of getting one:
 - You could clone this repository and build it yourself using Node 16.14.0+ (`npm run build`).
 
 ```html
-<script src="scratchblocks-min.js"></script>
+<script src="scratchblocks-plus.min.js"></script>
 ```
 
 The convention is to write scratchblocks inside `pre` tags with the class `blocks`:
@@ -90,13 +189,13 @@ move (10) steps
 You then need to call `scratchblocks.renderMatching` after the page has loaded.
 Make sure this appears at the end of the page (just before the closing `</body>` tag):
 
-```js
+```html
 <script>
-scratchblocks.renderMatching('pre.blocks', {
-  style:     'scratch3',   // Optional, defaults to 'scratch2'.
-  languages: ['en', 'de'], // Optional, defaults to ['en'].
-  scale: 1,                // Optional, defaults to 1
-});
+  scratchblocks.renderMatching("pre.blocks", {
+    style: "scratch3", // Optional, defaults to "scratch2".
+    languages: ["en", "de"], // Optional, defaults to ["en"].
+    scale: 1, // Optional, defaults to 1.
+  })
 </script>
 ```
 
@@ -114,14 +213,14 @@ I'm rather fond of the <code class="b">stamp</code> block in Scratch.
 
 To allow this, make a second call to `renderMatching` using the `inline` argument.
 
-```js
+```html
 <script>
-scratchblocks.renderMatching("pre.blocks", ...)
+  scratchblocks.renderMatching("pre.blocks", ...)
 
-scratchblocks.renderMatching("code.b", {
-  inline: true,
-  // Repeat `style` and `languages` options here.
-});
+  scratchblocks.renderMatching("code.b", {
+    inline: true,
+    // Repeat `style` and `languages` options here.
+  })
 </script>
 ```
 
@@ -145,38 +244,14 @@ scratchblocks.loadLanguages({
 })
 ```
 
-If you're using a JavaScript bundler you should be able to build your own translations file by calling `require()` with the path to the locale JSON file.
-This requires your bundler to allow importing JSON files as JavaScript.
+With ESM, import the locale JSON file when your bundler supports JSON modules:
 
 ```js
+import de from "scratchblocks-plus/locales/de.json"
+
 scratchblocks.loadLanguages({
-    de: require('scratchblocks/locales/de.json'),
+  de,
 })
-```
-
-## NPM
-
-The `scratchblocks-plus` package is published on NPM, and you can use it with browserify and other bundlers, if you're into that sort of thing.
-
-Once you've got browserify set up to build a client-side bundle from your app
-code, you can just add `scratchblocks-plus` to your dependencies, and everything
-should Just Work™.
-
-```js
-var scratchblocks = require('scratchblocks-plus');
-scratchblocks.renderMatching('pre.blocks');
-```
-
-## ESM Support
-
-scratchblocks-plus can be properly loaded as an ESM module. The ESM version, instead of defining `window.scratchblocks`, default-exports the `scratchblocks` object. Similarly, the JavaScript translation files default-exports a function to load the translations.
-
-```js
-import scratchblocks from "./scratchblocks-plus-es-min.js";
-import loadTranslations from "./translations-all-es.js";
-loadTranslations(scratchblocks);
-
-// window.scratchblocks is NOT available!
 ```
 
 # Languages
