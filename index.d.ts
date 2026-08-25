@@ -241,6 +241,7 @@ export interface RenderOptions {
   languages?: string[]
   scale?: number
   fontFamily?: string
+  catHats?: boolean
   read?: (el: HTMLElement, options: RenderOptions) => string
   parse?: (code: string, options: RenderOptions) => Document
   render?: (doc: Document, options: RenderOptions) => SVGElement

@@ -70,6 +70,7 @@ export { parse }
  *   - languages: string[]  (default: ["en"])
  *   - scale:     number    (default: 1)
  *   - fontFamily: string   CSS font-family value (default: style font)
+ *   - catHats:   boolean  render Scratch 3 hat blocks as cat hats (default: false)
  * @returns {string} Complete SVG XML string
  */
 export function renderToSVGString(code, options = {}) {

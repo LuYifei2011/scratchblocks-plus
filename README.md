@@ -77,9 +77,14 @@ import scratchblocks from "scratchblocks-plus"
 scratchblocks.renderMatching("pre.blocks", {
   style: "scratch3",
   languages: ["en"],
+  // catHats: true,
   // fontFamily: '"Noto Sans SC", sans-serif',
 })
 ```
+
+Set `catHats` to `true` to render all Scratch 3 hat and custom block
+definition hats as cat hats. It defaults to `false` and has no visual effect
+with the `scratch2` style.
 
 Use `fontFamily` to override the font family for all block labels, input
 values, and comments in that render. The value uses CSS `font-family` syntax;

@@ -448,6 +448,13 @@ class BlockView {
 
     // Avoid accidental mutation
     this.info = { ...block.info }
+    if (options?.catHats === true) {
+      if (this.info.shape === "hat") {
+        this.info.shape = "cat"
+      } else if (this.info.shape === "define-hat") {
+        this.info.shape = "define-cat"
+      }
+    }
     if (
       Object.prototype.hasOwnProperty.call(aliasExtensions, this.info.category)
     ) {
