@@ -13,23 +13,81 @@
     "url": "https://github.com/LuYifei2011/scratchblocks-plus/issues"
   },
   "type": "module",
-  "main": "build/scratchblocks-plus.min.js",
-  "module": "build/scratchblocks-plus.min.es.js",
-  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./build/scratchblocks-plus.min.es.js",
+      "default": "./build/scratchblocks-plus.min.es.js"
+    },
+    "./node-ssr": {
+      "types": "./node-ssr.d.ts",
+      "import": "./node-ssr.js",
+      "default": "./node-ssr.js"
+    },
+    "./node-ssr.js": {
+      "types": "./node-ssr.d.ts",
+      "import": "./node-ssr.js",
+      "default": "./node-ssr.js"
+    },
+    "./syntax": {
+      "types": "./syntax/index.d.ts",
+      "import": "./syntax/index.js",
+      "default": "./syntax/index.js"
+    },
+    "./syntax/index.js": {
+      "types": "./syntax/index.d.ts",
+      "import": "./syntax/index.js",
+      "default": "./syntax/index.js"
+    },
+    "./locales/all": {
+      "types": "./locales/all.d.ts",
+      "import": "./locales/all.js",
+      "default": "./locales/all.js"
+    },
+    "./locales/all.js": {
+      "types": "./locales/all.d.ts",
+      "import": "./locales/all.js",
+      "default": "./locales/all.js"
+    },
+    "./*": "./*"
+  },
+  "main": "./build/scratchblocks-plus.min.es.js",
+  "module": "./build/scratchblocks-plus.min.es.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
     "build": "rollup -c --environment buildTarget:PROD",
     "fmt": "prettier --cache --write *.js syntax/*.js scratch2/*.js scratch3/*.js locales-src/*.js snapshots/*.js tests/*.js",
-    "lint:staged": "lint-staged",
     "lint": "eslint *.js syntax/*.js scratch2/*.js scratch3/*.js locales-src/*.js snapshots/*.js tests/*.js",
+    "lint:staged": "lint-staged",
     "locales": "node locales-src/build-locales.js",
+    "manual": "node ./snapshots/manual.js",
     "rollup": "rollup -c",
     "snapshots": "node ./snapshots/index.js",
-    "manual": "node ./snapshots/manual.js",
     "start": "rollup -c -m -w",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest"
+  },
+  "types": "./index.d.ts",
+  "peerDependencies": {
+    "@napi-rs/canvas": "*",
+    "@xmldom/xmldom": ">=0.8.0",
+    "canvas": ">=2.0.0",
+    "jsdom": ">=16.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@xmldom/xmldom": {
+      "optional": true
+    },
+    "canvas": {
+      "optional": true
+    },
+    "@napi-rs/canvas": {
+      "optional": true
+    },
+    "jsdom": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@babel/cli": "^7.29.7",
@@ -59,29 +117,13 @@
     "scratch-l10n": "^6.1.86",
     "scratch-translate-extension-languages": "^1.0.7"
   },
-  "peerDependencies": {
-    "@napi-rs/canvas": "*",
-    "@xmldom/xmldom": ">=0.8.0",
-    "canvas": ">=2.0.0",
-    "jsdom": ">=16.0.0"
-  },
-  "peerDependenciesMeta": {
-    "@xmldom/xmldom": {
-      "optional": true
-    },
-    "canvas": {
-      "optional": true
-    },
-    "@napi-rs/canvas": {
-      "optional": true
-    },
-    "jsdom": {
-      "optional": true
-    }
-  },
   "keywords": [
     "scratch"
   ],
+  "jest": {
+    "transform": {}
+  },
+  "jsdelivr": "./build/scratchblocks-plus.min.js",
   "lint-staged": {
     "package.json": [
       "prettier-package-json --write",
@@ -98,7 +140,5 @@
     "trailingComma": "all",
     "arrowParens": "avoid"
   },
-  "jest": {
-    "transform": {}
-  }
+  "unpkg": "./build/scratchblocks-plus.min.js"
 }

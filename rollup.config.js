@@ -57,7 +57,7 @@ export default [
   {
     input: "browser.js",
     output: {
-      file: pkg.main,
+      file: pkg.unpkg,
       format: "iife",
       name: "scratchblocks",
       sourcemap: env.prod,

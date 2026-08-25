@@ -5,7 +5,7 @@ interface LocaleData {
   commands: Record<string, string>
   dropdowns: Record<string, { value: string; parents?: string[] }>
   aliases: Record<string, string>
-  renamedBlocks: Record<string, string>
+  renamedBlocks?: Record<string, string>
   definePrefix: string[]
   defineSuffix: string[]
   ignorelt: string[]
@@ -17,7 +17,7 @@ interface LocaleData {
   osis: string[]
   palette: Record<string, string>
   percentTranslated: number
-  categories: Record<string, string>
+  categories?: Record<string, string>
 }
 
 /**

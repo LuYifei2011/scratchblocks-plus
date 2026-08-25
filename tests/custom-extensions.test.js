@@ -21,6 +21,17 @@ function makeWindow() {
   }
 }
 
+test("render and replace apply their default options", () => {
+  const scratchblocks = init(makeWindow())
+  const document = scratchblocks.parse("move (10) steps")
+  const svg = scratchblocks.render(document)
+  const target = svg.ownerDocument.createElement("section")
+
+  expect(svg.getAttribute("class")).toBe("scratchblocks-style-scratch2")
+  expect(() => scratchblocks.replace(target, svg, document)).not.toThrow()
+  expect(target.firstChild.className).toBe("scratchblocks")
+})
+
 test("custom image icons keep their registered dimensions", () => {
   const scratchblocks = init(makeWindow())
   scratchblocks.registerIcon({

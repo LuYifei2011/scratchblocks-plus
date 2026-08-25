@@ -1,8 +1,7 @@
 /**
  * A label/text element in a block
  */
-export class Label {
-  constructor(value: string, cls?: string)
+export interface Label {
   value: string
   cls: string
   el: SVGElement | null
@@ -16,12 +15,10 @@ export class Label {
 /**
  * An icon in a block (e.g., greenFlag, stopSign)
  */
-export class Icon {
-  constructor(name: string)
+export interface Icon {
   name: string
   isArrow: boolean
   readonly isIcon: true
-  static icons: Record<string, boolean>
   stringify(): string
 }
 
@@ -53,10 +50,9 @@ export interface BlockInfo {
 /**
  * An input element in a block (text input, dropdown, etc.)
  */
-export class Input {
-  constructor(shape: string, value: string | number | boolean | Matrix | null)
+export interface Input {
   shape: string
-  value: string | number | boolean | Matrix | null
+  value: string | number | boolean | Matrix | null | undefined
   menu?: string
   label: Label | null
   x: number
@@ -71,7 +67,6 @@ export class Input {
   isDarker: boolean
   isSquare: boolean
   hasLabel: boolean
-  setMenu(value: string): void
   stringify(parentPrefix?: string): string
   translate(lang: LanguageData): void
 }
@@ -79,8 +74,7 @@ export class Input {
 /**
  * A matrix element in a block
  */
-export class Matrix {
-  constructor(rows: boolean[][])
+export interface Matrix {
   rows: boolean[][]
   readonly isMatrix: true
   stringify(): string
@@ -90,8 +84,7 @@ export class Matrix {
 /**
  * A block definition
  */
-export class Block {
-  constructor(info: BlockInfo, children: (Label | Icon | Input | Block | Script | Comment | Glow)[], comment?: Comment | null)
+export interface Block {
   info: BlockInfo
   children: (Label | Icon | Input | Block | Script | Comment | Glow)[]
   comment: Comment | null
@@ -116,21 +109,18 @@ export class Block {
 /**
  * A comment element
  */
-export class Comment {
-  constructor(value: string, hasBlock?: boolean)
+export interface Comment {
   label: Label
   width: number | null
   hasBlock?: boolean
   readonly isComment: true
   stringify(): string
-  translate(): void
 }
 
 /**
  * A glow effect (highlight) wrapper for blocks
  */
-export class Glow {
-  constructor(child: Block | Script)
+export interface Glow {
   child: Block | Script
   shape: string
   info?: BlockInfo
@@ -142,8 +132,7 @@ export class Glow {
 /**
  * A script (sequence of blocks)
  */
-export class Script {
-  constructor(blocks: Block[])
+export interface Script {
   blocks: Block[]
   isEmpty: boolean
   isFinal: boolean
@@ -156,8 +145,7 @@ export class Script {
 /**
  * A parsed document containing scripts
  */
-export class Document {
-  constructor(scripts: Script[])
+export interface Document {
   scripts: Script[]
   blockMap: Map<string, Block>
   getBlockByPath(path: string): Block | null
@@ -190,7 +178,7 @@ export interface DocumentView {
   defs: SVGDefsElement | null
   scale: number
   elementMap: Map<string, { el: SVGElement }>
-  
+
   measure(): void
   render(): SVGElement
   highlightBlock(path: string, options?: HighlightOptions): boolean
@@ -218,7 +206,12 @@ export interface RenderOptions {
   read?: (el: HTMLElement, options: RenderOptions) => string
   parse?: (code: string, options: RenderOptions) => Document
   render?: (doc: Document, options: RenderOptions) => SVGElement
-  replace?: (el: HTMLElement, svg: SVGElement, doc: Document, options: RenderOptions) => void
+  replace?: (
+    el: HTMLElement,
+    svg: SVGElement,
+    doc: Document,
+    options: RenderOptions,
+  ) => void
 }
 
 /**
@@ -236,7 +229,7 @@ export interface LanguageData {
   commands: Record<string, string>
   dropdowns: Record<string, { value: string; parents?: string[] }>
   aliases: Record<string, string>
-  renamedBlocks: Record<string, string>
+  renamedBlocks?: Record<string, string>
   definePrefix: string[]
   defineSuffix: string[]
   ignorelt: string[]
@@ -248,14 +241,107 @@ export interface LanguageData {
   osis: string[]
   palette: Record<string, string>
   percentTranslated: number
-  categories: Record<string, string>
+  categories?: Record<string, string>
   blocksByHash?: Record<string, BlockInfo[]>
   nativeAliases?: Record<string, string[]>
   nativeDropdowns?: Record<string, Array<{ id: string; parents?: string[] }>>
 }
 
+export interface LabelConstructor {
+  new (value: string, cls?: string): Label
+}
+
+export interface IconConstructor {
+  new (name: string): Icon
+  readonly icons: Record<string, boolean>
+}
+
+export interface InputConstructor {
+  new (shape: string, value?: string | number | boolean | Matrix | null): Input
+}
+
+export interface MatrixConstructor {
+  new (rows: boolean[][]): Matrix
+}
+
+export interface BlockConstructor {
+  new (
+    info: BlockInfo,
+    children: (Label | Icon | Input | Block | Script | Comment | Glow)[],
+    comment?: Comment | null,
+  ): Block
+}
+
+export interface CommentConstructor {
+  new (value: string, hasBlock?: boolean): Comment
+}
+
+export interface GlowConstructor {
+  new (child: Block | Script): Glow
+}
+
+export interface ScriptConstructor {
+  new (blocks: Block[]): Script
+}
+
+export interface DocumentConstructor {
+  new (scripts: Script[]): Document
+}
+
+export interface IconSource {
+  type: "svg" | "image"
+  data: string
+}
+
+export interface IconStyleInfo {
+  width: number
+  height: number
+  dy?: number
+  source: IconSource
+}
+
+export interface RegisterIconOptions {
+  name: string
+  inline?: boolean
+  scratch2?: IconStyleInfo
+  scratch3?: IconStyleInfo
+  scratch3HighContrast?: IconStyleInfo
+}
+
+export interface Scratch3CategoryStyle {
+  primary: string
+  secondary: string
+  tertiary: string
+}
+
+export type CategoryStyles = Record<
+  string,
+  string | Scratch3CategoryStyle | undefined
+> & {
+  scratch2?: string
+  scratch3?: Scratch3CategoryStyle
+  scratch3HighContrast?: Scratch3CategoryStyle
+  scratch3Outline?: Scratch3CategoryStyle
+}
+
+export interface RegisterCategoryOptions {
+  name: string
+  icon?: string
+  aliases?: string[]
+  styles?: CategoryStyles
+}
+
+export interface RegisterBlockOptions {
+  id: string
+  spec?: string
+  inputs?: string[]
+  shape: string
+  category: string
+  hasLoopArrow?: boolean
+}
+
 /**
- * Main scratchblocks API returned by the default export function
+ * Main scratchblocks API exposed by the default export
  */
 export interface ScratchblocksAPI {
   // Languages
@@ -271,30 +357,50 @@ export interface ScratchblocksAPI {
 
   // Reading and replacing
   read(el: HTMLElement, options?: { inline?: boolean }): string
-  replace(el: HTMLElement, svg: SVGElement, doc: Document, options?: RenderOptions): void
+  replace(
+    el: HTMLElement,
+    svg: SVGElement,
+    doc: Document,
+    options?: RenderOptions,
+  ): void
 
   // Styles
   appendStyles(): void
+  updateStyles(): void
 
   // Classes
-  Label: typeof Label
-  Icon: typeof Icon
-  Input: typeof Input
-  Block: typeof Block
-  Comment: typeof Comment
-  Script: typeof Script
-  Document: typeof Document
+  Label: LabelConstructor
+  Icon: IconConstructor
+  Input: InputConstructor
+  Block: BlockConstructor
+  Comment: CommentConstructor
+  Script: ScriptConstructor
+  Document: DocumentConstructor
 
   // Highlight API
-  highlightBlock(view: DocumentView, path: string, options?: HighlightOptions): boolean
+  highlightBlock(
+    view: DocumentView,
+    path: string,
+    options?: HighlightOptions,
+  ): boolean
   clearHighlight(view: DocumentView, path?: string | null): void
   getBlockByPath(doc: Document, path: string): Block | null
   getElementByPath(view: DocumentView, path: string): SVGElement | null
+
+  // Custom extensions
+  registerIcon(options: RegisterIconOptions): void
+  registerCategory(options: RegisterCategoryOptions): void
+  registerBlock(options: RegisterBlockOptions): void
+  registerBlockTranslation(
+    lang: string,
+    blockId: string,
+    spec: string,
+    aliases?: string[],
+  ): void
 }
 
 /**
- * Initializes scratchblocks with a window object and returns the scratchblocks API
- * When imported from npm, this is the default export
+ * Browser-ready scratchblocks API
  */
 declare const scratchblocks: ScratchblocksAPI
 
