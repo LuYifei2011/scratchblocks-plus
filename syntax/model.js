@@ -165,6 +165,7 @@ export class Matrix {
 
 export class Input {
   constructor(shape, value) {
+    this.id = null
     this.shape = shape
     this.value = value
 
@@ -274,6 +275,7 @@ export class Input {
 export class Block {
   constructor(info, children, comment) {
     assert(info)
+    this.id = null
     this.info = { ...info }
     this.children = children
     this.comment = comment || null
@@ -533,6 +535,7 @@ export class Block {
 
 export class Comment {
   constructor(value, hasBlock) {
+    this.id = null
     this.label = new Label(value, "comment-label")
     this.width = null
     this.hasBlock = hasBlock
@@ -586,6 +589,7 @@ export class Glow {
 
 export class Script {
   constructor(blocks) {
+    this.id = null
     this.blocks = blocks
     this.isEmpty = !blocks.length
     this.isFinal = !this.isEmpty && blocks[blocks.length - 1].isFinal

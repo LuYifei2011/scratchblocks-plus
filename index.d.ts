@@ -82,6 +82,7 @@ export interface BlockInfo {
  * An input element in a block (text input, dropdown, etc.)
  */
 export interface Input extends SyntaxNodeFlags<"input"> {
+  id: string | null
   shape: string
   value: string | number | boolean | Matrix | null | undefined
   menu?: string
@@ -116,6 +117,7 @@ export interface Matrix extends SyntaxNodeFlags<"matrix"> {
  * A block definition
  */
 export interface Block extends SyntaxNodeFlags<"block"> {
+  id: string | null
   info: BlockInfo
   children: BlockChild[]
   comment: Comment | null
@@ -141,6 +143,7 @@ export interface Block extends SyntaxNodeFlags<"block"> {
  * A comment element
  */
 export interface Comment extends SyntaxNodeFlags<"comment"> {
+  id: string | null
   label: Label
   width: number | null
   hasBlock?: boolean
@@ -164,6 +167,7 @@ export interface Glow extends SyntaxNodeFlags<"glow"> {
  * A script (sequence of blocks)
  */
 export interface Script extends SyntaxNodeFlags<"script"> {
+  id: string | null
   blocks: ScriptBlock[]
   isEmpty: boolean
   isFinal: boolean
@@ -191,6 +195,7 @@ export interface Document {
 }
 
 export interface ScriptView extends SyntaxNodeFlags<"script"> {
+  id: string | null
   blocks: Array<Block | Glow>
   isEmpty: boolean
   isFinal: boolean
@@ -221,6 +226,7 @@ export interface DocumentView {
   highlightBlock(path: string, options?: HighlightOptions): boolean
   clearHighlight(path?: string | null): void
   getElementByPath(path: string): SVGElement | null
+  getElementById(id: string): SVGElement | null
   exportSVGString(): string
   exportSVG(): string
   toCanvas(cb: (canvas: HTMLCanvasElement) => void, exportScale?: number): void
@@ -421,6 +427,7 @@ export interface ScratchblocksAPI {
   clearHighlight(view: DocumentView, path?: string | null): void
   getBlockByPath(doc: Document, path: string): Block | null
   getElementByPath(view: DocumentView, path: string): SVGElement | null
+  getElementById(view: DocumentView, id: string): SVGElement | null
 
   // Custom extensions
   registerIcon(options: RegisterIconOptions): void
