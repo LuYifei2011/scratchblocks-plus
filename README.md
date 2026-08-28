@@ -154,6 +154,24 @@ const document: Document = scratchblocks.parse("move (10) steps")
 const block: Block = document.scripts[0].blocks[0]
 ```
 
+`block.info.id` identifies the registered Scratch block definition. For an
+application-defined identity, assign `id` directly to a `Script`, `Block`,
+`Input`, or `Comment` before creating a view or rendering:
+
+```js
+const document = scratchblocks.parse("move (10) steps")
+const block = document.scripts[0].blocks[0]
+block.id = "workspace-block-42"
+
+const view = scratchblocks.newView(document, { style: "scratch3" })
+view.render()
+const element = view.getElementById("workspace-block-42")
+```
+
+The ID is rendered as `data-sb-id`; it is not part of scratchblocks text and is
+not included by `stringify()`. Duplicate IDs are allowed, and lookup returns the
+first matching element in document order.
+
 <!--
 ## MediaWiki
 

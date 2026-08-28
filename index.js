@@ -134,6 +134,19 @@ export default function (window) {
     return null
   }
 
+  /**
+   * Get the first SVG element for an external node ID
+   * @param {DocumentView} view - The rendered view from newView()
+   * @param {string} id - External node ID
+   * @returns {SVGElement|null}
+   */
+  function getElementById(view, id) {
+    if (view && typeof view.getElementById === "function") {
+      return view.getElementById(id)
+    }
+    return null
+  }
+
   /*****************************************************************************/
 
   /*** Render ***/
@@ -375,6 +388,7 @@ export default function (window) {
     clearHighlight: clearHighlight,
     getBlockByPath: getBlockByPath,
     getElementByPath: getElementByPath,
+    getElementById: getElementById,
 
     // Custom Extensions
     registerIcon: registerIcon,

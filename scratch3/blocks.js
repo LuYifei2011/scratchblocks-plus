@@ -52,6 +52,25 @@ function removeClass(el, className) {
   }
 }
 
+function setNodeId(el, node) {
+  if (node.id != null) {
+    SVG.setProps(el, { "data-sb-id": node.id })
+  }
+  return el
+}
+
+function elementsWithAttribute(root, attribute) {
+  if (root.querySelectorAll) {
+    return root.querySelectorAll(`[${attribute}]`)
+  }
+  if (root.getElementsByTagName) {
+    return Array.from(root.getElementsByTagName("*")).filter(el =>
+      el.hasAttribute(attribute),
+    )
+  }
+  return []
+}
+
 export class LabelView {
   constructor(label, options) {
     Object.assign(this, label)
@@ -432,7 +451,7 @@ export class InputView {
         ),
       )
     }
-    return result
+    return setNodeId(result, this)
   }
 }
 
@@ -806,13 +825,14 @@ class BlockView {
       })
     }
 
+    let result = group
     if (this.info.shape === "define-cat") {
       // TODO properly handle this case
       this.height += 16
-      return SVG.group([SVG.move(0, 16, group)]) // Wrap in group to ensure transform is not overridden
+      result = SVG.group([SVG.move(0, 16, group)]) // Wrap in group to ensure transform is not overridden
     }
 
-    return group
+    return setNodeId(result, this)
   }
 }
 
@@ -844,13 +864,16 @@ export class CommentView {
     const labelEl = this.label.draw(iconStyle)
 
     this.width = this.label.width + 16
-    return SVG.group([
-      SVG.commentLine(this.hasBlock ? CommentView.lineLength : 0, 6),
-      SVG.commentRect(this.width, this.height, {
-        class: "sb3-comment",
-      }),
-      SVG.move(8, 4, labelEl),
-    ])
+    return setNodeId(
+      SVG.group([
+        SVG.commentLine(this.hasBlock ? CommentView.lineLength : 0, 6),
+        SVG.commentRect(this.width, this.height, {
+          class: "sb3-comment",
+        }),
+        SVG.move(8, 4, labelEl),
+      ]),
+      this,
+    )
   }
 }
 
@@ -965,7 +988,7 @@ class ScriptView {
     if (!inside && lastBlock.isGlow) {
       this.height += 7 // TODO unbreak this
     }
-    return SVG.group(children)
+    return setNodeId(SVG.group(children), this)
   }
 }
 
@@ -986,6 +1009,8 @@ class DocumentView {
 
     // Map of blockPath -> { el, rect } for highlighting
     this.elementMap = new Map()
+    // Map of external node ID -> first rendered element in document order
+    this._idElementMap = new Map()
   }
 
   measure() {
@@ -1046,20 +1071,27 @@ class DocumentView {
     return svg
   }
 
-  /**
-   * Build the element map by finding all elements with data-block-path
-   */
+  /** Build the rendered element indexes. */
   _buildElementMap() {
-    if (!this.el || !this.el.querySelectorAll) {
+    if (!this.el) {
       return
     }
 
     this.elementMap.clear()
-    const blocks = this.el.querySelectorAll("[data-block-path]")
+    const blocks = elementsWithAttribute(this.el, "data-block-path")
     blocks.forEach(el => {
       const path = el.getAttribute("data-block-path")
       if (path) {
         this.elementMap.set(path, { el })
+      }
+    })
+
+    this._idElementMap.clear()
+    const identifiedNodes = elementsWithAttribute(this.el, "data-sb-id")
+    identifiedNodes.forEach(el => {
+      const id = el.getAttribute("data-sb-id")
+      if (id != null && !this._idElementMap.has(id)) {
+        this._idElementMap.set(id, { el })
       }
     })
   }
@@ -1071,6 +1103,16 @@ class DocumentView {
    */
   getElementByPath(path) {
     const entry = this.elementMap.get(path)
+    return entry ? entry.el : null
+  }
+
+  /**
+   * Get the first rendered element with an external node ID.
+   * @param {string} id - External node ID
+   * @returns {SVGElement|null}
+   */
+  getElementById(id) {
+    const entry = this._idElementMap.get(id)
     return entry ? entry.el : null
   }
 
