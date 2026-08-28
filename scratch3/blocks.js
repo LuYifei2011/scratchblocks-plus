@@ -59,6 +59,29 @@ function setNodeId(el, node) {
   return el
 }
 
+function hideElement(el, hidden) {
+  if (hidden === true) {
+    SVG.setProps(el, {
+      visibility: "hidden",
+      "aria-hidden": "true",
+    })
+  }
+  return el
+}
+
+function isNodeHidden(node) {
+  if (node.isBlock) {
+    return node.hidden === true
+  }
+  if (node.isGlow) {
+    return isNodeHidden(node.child)
+  }
+  if (node.isScript) {
+    return node.blocks.length > 0 && node.blocks.every(isNodeHidden)
+  }
+  return false
+}
+
 function elementsWithAttribute(root, attribute) {
   if (root.querySelectorAll) {
     return root.querySelectorAll(`[${attribute}]`)
@@ -832,7 +855,7 @@ class BlockView {
       result = SVG.group([SVG.move(0, 16, group)]) // Wrap in group to ensure transform is not overridden
     }
 
-    return setNodeId(result, this)
+    return setNodeId(hideElement(result, this.hidden), this)
   }
 }
 
@@ -925,7 +948,10 @@ class GlowView {
     this.height = (c.isBlock && c.firstLine.height) || c.height
 
     // encircle
-    return SVG.group([el, this.drawSelf(iconStyle)])
+    return hideElement(
+      SVG.group([el, this.drawSelf(iconStyle)]),
+      isNodeHidden(c),
+    )
   }
 }
 
@@ -961,7 +987,8 @@ class ScriptView {
       if (diff === "-") {
         const dw = block.width
         const dh = block.firstLine.height || block.height
-        children.push(SVG.move(x, y + dh / 2 + 1, SVG.strikethroughLine(dw)))
+        const line = hideElement(SVG.strikethroughLine(dw), isNodeHidden(block))
+        children.push(SVG.move(x, y + dh / 2 + 1, line))
         this.width = Math.max(this.width, block.width)
       }
 
@@ -975,7 +1002,7 @@ class ScriptView {
           BlockView.padding[block.info.shape] || BlockView.padding.null
         const cy =
           y - block.height + (line.height - padding[2]) / 2 + padding[2] // ensure hat block comments are attached to middle of solid part
-        const el = comment.draw(iconStyle)
+        const el = hideElement(comment.draw(iconStyle), isNodeHidden(block))
         children.push(SVG.move(cx, cy - comment.height / 2, el))
         this.width = Math.max(this.width, cx + comment.width)
       }

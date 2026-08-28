@@ -172,6 +172,26 @@ The ID is rendered as `data-sb-id`; it is not part of scratchblocks text and is
 not included by `stringify()`. Duplicate IDs are allowed, and lookup returns the
 first matching element in document order.
 
+To hide a block without removing its layout space, set its optional `hidden`
+property before creating the view:
+
+```js
+const doc = scratchblocks.parse(`repeat (10)
+  move (10) steps
+end`)
+doc.getBlockByPath("1.1").hidden = true
+
+const view = scratchblocks.newView(doc, { style: "scratch3" })
+view.render()
+```
+
+When `hidden` is `true`, the block, its nested blocks, and attached visual
+annotations are invisible, while their original dimensions and positions are
+preserved. Hidden blocks remain available through element lookup APIs. The
+property is application-only: scratchblocks text cannot set it, and
+`stringify()` does not include it. Create a new view after changing `hidden` on
+an existing document.
+
 <!--
 ## MediaWiki
 

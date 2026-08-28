@@ -118,6 +118,7 @@ export interface Matrix extends SyntaxNodeFlags<"matrix"> {
  */
 export interface Block extends SyntaxNodeFlags<"block"> {
   id: string | null
+  hidden?: boolean
   info: BlockInfo
   children: BlockChild[]
   comment: Comment | null
